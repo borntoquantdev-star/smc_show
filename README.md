@@ -1387,7 +1387,7 @@ Potential: Portfolio of 5-10 symbols
 
 รูปที่ 2 แสดง TradingView chart พร้อม analysis:
 
-![Trading Chart](https://github.com/user-attachments/assets/[YOUR-IMAGE-2-ID])
+![Trading Chart](4.tdv.png)
 
 *TradingView chart showing EURUSD 5M with Order Block zones, entry point (BUY), support/resistance levels, and SMC analysis zones*
 
