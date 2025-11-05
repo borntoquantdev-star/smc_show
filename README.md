@@ -1241,316 +1241,478 @@ Potential: Portfolio of 5-10 symbols
 
 ## 📊 Example Results & Live Output
 
-### System Workflow Visualization
+### Workflow Architecture Visualization
 
-![n8n Workflow Architecture](workflow_architecture.png)
-*Figure 1: Complete n8n workflow showing all 4 AI agents, decision gates, and data flow*
+รูปที่ 1 แสดงสถาปัตยกรรม n8n workflow แบบเต็ม:
+
+![n8n Workflow](https://github.com/user-attachments/assets/[YOUR-IMAGE-1-ID])
+
+*Complete n8n workflow showing all 4 AI agents (1H, 15M, 5M, Coordinator), decision gates (If3, If6, If7), merge nodes, and complete data flow*
 
 ---
 
-### Example 1: 5M Agent Analysis - EURUSD LONG Setup
+### Example 1: 5M Agent Output - EURUSD LONG Entry
 
-**Scenario:** 5M LTF Agent detecting bullish entry signal after bounce from Order Block
+**ไฟล์ต้นฉบับ:** [2.1.txt](2.1.txt)
 
-**Symbol:** EURUSD
-**Timeframe:** 5M
-**Timestamp:** 2025-11-05 08:15:00
-**Decision:** **ENTER NOW (LONG)**
-
-#### Analysis Summary
+**Output JSON เต็ม:**
 
 ```json
-{
-  "current_candle_analysis": {
-    "type": "Bullish",
-    "body_size": "MEDIUM",
-    "close_position": "Near HIGH",
-    "price": 1.1493,
-    "signal": "Bullish confirmation candle closed near high showing strong continuation buying pressure"
-  },
-  "entry_trigger": {
-    "status": "TRIGGERED",
-    "pattern_detected": "Rejection Series",
-    "pattern_completion": "FULLY_FORMED",
-    "ready_score": "5/5"
-  },
-  "execution_decision": {
-    "action": "ENTER_NOW",
-    "confidence": "HIGH",
-    "reasoning": "Visual shows completed bounce from OB zone with fully formed bullish confirmation"
+[
+  {
+    "output": {
+      "timeframe": "5m",
+      "timestamp": "2025-11-05T08:15:00",
+      "symbol": "BTCUSDT",
+      "analysis": {
+        "current_candle_analysis": {
+          "type": "Bullish",
+          "body_size": "MEDIUM",
+          "wicks": {
+            "upper": "SHORT",
+            "lower": "SHORT"
+          },
+          "close_position": "Near HIGH",
+          "status": "CLOSED",
+          "price": 1.1493,
+          "signal": "Bullish confirmation candle closed near high showing strong continuation buying pressure.",
+          "visual_description": "Medium bullish candle with minimal wicks, closing near high confirms continuation after bounce.",
+          "json_confirmation": "Candle data shows close=1.1493 > open≈1.1489 confirming a bullish body aligning with visual."
+        },
+        "entry_trigger": {
+          "status": "TRIGGERED",
+          "pattern_detected": "Rejection Series",
+          "pattern_completion": "FULLY_FORMED",
+          "confirmation_candle": "PRESENT - consecutive bullish candles after bounce",
+          "ready_score": "5/5",
+          "visual_evidence": "Price bounced sharply from OB zone (1.1480–1.1485) forming two strong bullish confirmation candles.",
+          "json_validation": "JSON confirms price structure above OB zone with bullish closes and rising momentum candles."
+        },
+        "execution_decision": {
+          "action": "ENTER_NOW",
+          "confidence": "HIGH",
+          "reasoning": "Visual shows completed bounce from OB zone with fully formed bullish confirmation. JSON data validates higher closes and no evidence of rejection weakening. Momentum aligns to upside. Hence setup qualifies for immediate long entry.",
+          "visual_weight": "40%",
+          "json_weight": "30%",
+          "15m_quality_weight": "30%"
+        },
+        "position_details": {
+          "price_location": "BOUNCING",
+          "distance_from_zone": "10-15 pips above zone",
+          "zone_interaction": "Price bounced cleanly from 1.1480–1.1485 bullish OB zone and is rising toward 1.1493.",
+          "visual_description": "Price rejected bullish OB and produced two strong green candles moving upward.",
+          "json_confirmation": "Current price above zone top (1.1485) with sustained bullish candle closes."
+        },
+        "momentum_assessment": {
+          "direction": "CLEAR UP",
+          "state": "ACCELERATING",
+          "candle_sequence": "R R R G G G G",
+          "body_sizes": "INCREASING",
+          "speed": "MODERATE",
+          "visual_momentum": "After series of red, strong sequence of green candles formed, signaling acceleration.",
+          "json_momentum": "JSON confirms consecutive bullish closes from 1.1482 to 1.1495 region showing strength."
+        },
+        "rejection_quality": {
+          "present": true,
+          "strength": "STRONG",
+          "type": "Sharp V-shape",
+          "wick_length": "short wicks (clear directional close)",
+          "bounce_style": "Clean acceleration from order block",
+          "visual_description": "Price formed notable reversal at OB and rose in V-shaped bounce.",
+          "json_confirmation": "Low near 1.1480 strongly reversed with bullish close near 1.1493 indicating robust rejection."
+        }
+      },
+      "visual_json_synthesis": {
+        "agreement_level": "GOOD",
+        "visual_insights_used": [
+          "Bullish medium-bodied candle closed near high",
+          "Confirmed Rejection Series after bounce from OB",
+          "Momentum showing strong continuous bullish run"
+        ],
+        "json_confirmations": [
+          "JSON candle data confirm sequential higher closes after 1.1480 region.",
+          "No signs of bearish structural breakdown; consistent bullish bias."
+        ],
+        "discrepancies": [
+          "Minor lag in JSON reflecting current 5M momentum size difference but directionally consistent."
+        ],
+        "confidence_impact": "High confidence entry as visual and JSON align, small timing variance does not reduce validity."
+      },
+      "trade_execution": {
+        "enter": true,
+        "entry_price": 1.1493,
+        "stop_loss": 1.148,
+        "take_profit_1": 1.15,
+        "take_profit_2": 1.1508,
+        "risk_reward": "1:1.3 (TP1) / 1:2.0 (TP2)",
+        "position_size": "FULL",
+        "notes": "All signals confirm strong bullish continuation with solid rejection from 1.1480–1.1485 OB. Price exhibits upward acceleration and confirmation on JSON data."
+      },
+      "warnings": [
+        "Monitor volatility near 1.1500 resistance zone for potential profit-taking reactions."
+      ]
+    }
   }
-}
+]
 ```
 
-#### Trade Setup Details
+#### 📋 สรุปการตัดสินใจ (Example 1)
 
-| Parameter | Value | Description |
-|-----------|-------|-------------|
-| **Entry Price** | 1.1493 | Current market price |
-| **Stop Loss** | 1.1480 | Below Order Block zone |
-| **Take Profit 1** | 1.1500 | First resistance level |
-| **Take Profit 2** | 1.1508 | Extended target |
-| **Risk/Reward** | 1:1.3 (TP1) / 1:2.0 (TP2) | Favorable R:R ratio |
-| **Position Size** | FULL (100%) | High confidence setup |
+| หัวข้อ | ค่า |
+|--------|-----|
+| **Symbol** | BTCUSDT |
+| **Timeframe** | 5M |
+| **Action** | **ENTER NOW (LONG)** ✅ |
+| **Confidence** | HIGH |
+| **Entry Price** | 1.1493 |
+| **Stop Loss** | 1.1480 |
+| **Take Profit 1** | 1.1500 |
+| **Take Profit 2** | 1.1508 |
+| **Risk:Reward** | 1:1.3 / 1:2.0 |
+| **Position Size** | FULL (100%) |
+| **Pattern** | Rejection Series (FULLY_FORMED) |
+| **Ready Score** | 5/5 ⭐⭐⭐⭐⭐ |
 
-#### Visual-JSON Synthesis
-
-**Visual Insights:**
-- Bullish medium-bodied candle closed near high
-- Confirmed Rejection Series after bounce from OB
-- Momentum showing strong continuous bullish run
-
-**JSON Confirmations:**
-- Sequential higher closes after 1.1480 region
-- No signs of bearish structural breakdown
-- Consistent bullish bias maintained
-
-**Agreement Level:** **GOOD** (Visual and JSON data align strongly)
-
-**Momentum Assessment:**
-```
-Direction: CLEAR UP
-State: ACCELERATING
-Candle Sequence: R R R G G G G
-Speed: MODERATE
-```
-
-#### Rejection Quality Analysis
-
-| Metric | Assessment |
-|--------|------------|
-| **Present** | ✅ Yes |
-| **Strength** | STRONG |
-| **Type** | Sharp V-shape |
-| **Bounce Style** | Clean acceleration from order block |
-| **Wick Analysis** | Short wicks (clear directional close) |
-
-**Visual Description:** "Price formed notable reversal at OB and rose in V-shaped bounce"
-
-**JSON Confirmation:** "Low near 1.1480 strongly reversed with bullish close near 1.1493 indicating robust rejection"
-
-#### Warnings & Monitoring
-
-⚠️ **Monitor volatility near 1.1500 resistance zone for potential profit-taking reactions**
-
-**Full JSON Output:** See [2.1.txt](2.1.txt) for complete analysis
-
----
-
-### Example 2: Coordinator Decision - XAUUSD SHORT Setup
-
-**Scenario:** Multi-timeframe coordination with wait recommendation
-
-**Symbol:** XAUUSD (Gold)
-**Timestamp:** 2025-11-05 08:30:00
-**Decision:** **WAIT** (for optimal entry zone)
-
-![Trading Analysis Chart](trading_chart.png)
-*Figure 2: TradingView chart showing multi-timeframe analysis with Order Blocks, FVG zones, and entry points*
-
-#### Coordinator Summary
-
-```json
-{
-  "final_action": "WAIT",
-  "direction": "SHORT",
-  "confidence": "HIGH",
-  "risk_level": "MEDIUM",
-  "urgency": "NORMAL"
-}
-```
-
-#### Multi-Timeframe Synthesis
-
-| Timeframe | Synthesis Agreement | Status | Key Finding |
-|-----------|-------------------|--------|-------------|
-| **1H (HTF)** | GOOD ✅ | Bearish Bias | Clear bearish structure with pristine OB at 1.1600–1.1615 |
-| **15M (MTF)** | GOOD ✅ | Setup Quality | Retracement toward 1.1520–1.1528 supply zone expected |
-| **5M (LTF)** | GOOD ✅ | Execution Ready | Bullish bounce confirming move to resistance |
-
-**Multi-TF Synthesis Score:** 90/100 (STRONG)
-**Data Alignment Score:** 85/100 (GOOD)
-**Final Combined Score:** 87.5/100
-
-#### Comprehensive Scoring Breakdown
-
-```javascript
-Synthesis Contribution:     36.0  (90 × 0.40)
-Data Contribution:          21.25 (85 × 0.25)
-Synthesis Confidence:       21.25 (85 × 0.25)
-Risk Contribution:          8.0   ((100-4×10) × 0.10)
-─────────────────────────────────────────────
-FINAL SCORE:               87.5/100 (STRONG)
-```
-
-#### Agreement Analysis
-
-**All Timeframes Show GOOD Agreement:**
-- HTF (1H): GOOD ✅
-- MTF (15M): GOOD ✅
-- LTF (5M): GOOD ✅
-- **Unanimous:** Yes (No conflicts detected)
-
-**Synthesis Conflict Analysis:**
-```
-Conflicts Detected: 0
-Overall Harmony: GOOD
-Description: "No synthesis conflicts. All TFs show GOOD alignment with no contradictions between visual and JSON data"
-```
-
-#### Trading Plan Details
-
-**Should Trade:** No (Wait for optimal entry)
-
-**Confidence Justification:**
-> "While multi-timeframe synthesis is strong and no conflicts are detected, 15M analysis shows price still building toward the supply zone. Optimal entry will occur on bearish rejection at 1.1520–1.1528."
-
-**Entry Strategy:**
-```json
-{
-  "method": "DEFERRED SHORT",
-  "entry_zone": [1.1520, 1.1528],
-  "position_size": "75% of normal",
-  "reasoning": "Strong visual-JSON harmony but trade not yet at desired zone"
-}
-```
-
-**Risk Management:**
-| Parameter | Value | Action |
-|-----------|-------|--------|
-| **Stop Loss** | 1.1620 | Above supply zone |
-| **Take Profit 1** | 1.1485 | Take partial profit |
-| **Take Profit 2** | 1.1450 | Take final profit |
-| **Risk/Reward** | 1:3 | Excellent ratio |
-| **Max Risk** | 1.5% of capital | Conservative sizing |
-
-#### Exit Strategy
-
-**Visual Exit Triggers:**
-- Bullish BOS on 5M while in short position
-- Strong bullish engulfing candle after entry
-
-**Breakeven Trigger:**
-- Price reaches 1.1490 area → Move SL to breakeven
-
-#### Recommendations
-
-**Primary Recommendation:**
-> "Wait for price to reach 1.1520–1.1528. Then confirm 5M bearish rejection before entering short."
-
-**Rationale:**
-> "All three TFs show GOOD agreement and alignment toward HTF bearish bias. However, active retracement underway implies entry patience required. Once rejection confirms at supply, probability of success will be maximized."
-
-**Alternative Plan:**
-> "If price breaks above 1.162, bearish setup invalidates; reassess bias."
-
-#### Monitoring Points
-
-**Next Steps:**
-1. ✅ Watch 15M structure for retracement completion
-2. ✅ Observe 5M price behavior near 1.1520–1.1528 zone
-3. ✅ Enter short ONLY when bearish confirmation appears on 5M
-
-#### Execution Checklist
-
-```
-✅ 1H synthesis - GOOD alignment (Bearish bias confirmed)
-✅ 15M synthesis - GOOD alignment (retracement phase)
-✅ 5M synthesis - GOOD alignment (retracement support)
-✅ Multi-TF synthesis - STRONG (90/100)
-✅ Data alignment - GOOD (85/100)
-✅ Synthesis confidence - HIGH
-✅ No conflicts detected
-⚠️ Wait for price to reach and reject 1.1520–1.1528 zone
-⚠️ Place SL 1.162; TP1 1.1485; TP2 1.145
-```
-
-#### Synthesis Insights
-
-**What Synthesis Reveals:**
-1. **1H:** Bearish visual pattern confirmed by JSON FVG and OB data
-2. **15M:** Bullish retracement visual toward resistance confirmed by JSON liquidity data
-3. **5M:** Intraday bullish momentum visual confirmed by JSON data (retracement phase)
-
-**Why Synthesis Matters:**
-> "Consistent visual-JSON synthesis across TFs ensures signal legitimacy; alignment suggests short bias confirmation after retracement."
-
-**Synthesis Edge:**
-> "High-confidence multi-TF confluence enables precise timing once rejection occurs at predefined OB zone."
-
-**Agreement Power:**
-> "GOOD agreement across all TFs yields STRONG readiness; patience ensures best strike point."
-
-**Full JSON Output:** See [2.txt](2.txt) for complete coordinator analysis
-
----
-
-### Key Observations from Real Trading Outputs
-
-#### 1. Visual-JSON Synthesis Power
-
-Both examples demonstrate the system's core strength: **combining visual chart analysis with quantitative JSON data**
-
-**Example 1 (5M EURUSD):**
+**Visual-JSON Synthesis:**
+- Agreement Level: **GOOD** ✅
 - Visual: "Sharp V-shaped bounce from OB zone"
 - JSON: "Sequential higher closes from 1.1482 to 1.1495"
-- Result: **HIGH confidence immediate entry**
+- Momentum: **CLEAR UP, ACCELERATING**
 
-**Example 2 (Coordinator XAUUSD):**
-- Visual: "Retracement toward supply zone clearly visible"
-- JSON: "Bullish FVGs forming, aligning with retracement"
-- Result: **WAIT decision with precise entry zone**
+---
 
-#### 2. Multi-Timeframe Alignment
+### Example 2: Coordinator Agent Output - XAUUSD Analysis
 
-**Perfect Alignment Example (XAUUSD):**
+**ไฟล์ต้นฉบับ:** [2.txt](2.txt)
+
+รูปที่ 2 แสดง TradingView chart พร้อม analysis:
+
+![Trading Chart](https://github.com/user-attachments/assets/[YOUR-IMAGE-2-ID])
+
+*TradingView chart showing EURUSD 5M with Order Block zones, entry point (BUY), support/resistance levels, and SMC analysis zones*
+
+**Output JSON เต็ม:**
+
+```json
+[
+  {
+    "output": {
+      "coordinator_decision": {
+        "timestamp": "2025-11-05T08:30:00",
+        "symbol": "XAUUSD",
+        "final_action": "WAIT",
+        "direction": "SHORT",
+        "confidence": "HIGH",
+        "risk_level": "MEDIUM",
+        "urgency": "NORMAL"
+      },
+      "multi_timeframe_synthesis_summary": {
+        "1h_synthesis": {
+          "agreement_level": "GOOD",
+          "visual_insights_summary": "1H shows a crystal-clear bearish structure with lower highs and lower lows, confirming a strong downtrend. Visual bearish OB at 1.1600–1.1615 is pristine and unmitigated.",
+          "json_confirmations_summary": "Bearish BOS confirmed; multiple bearish FVGs support continuation.",
+          "discrepancies": [
+            "Minor localized FVG mitigations do not reverse structure."
+          ],
+          "confidence_boost": "High – Strong visual clarity matched with JSON confirmation.",
+          "status_icon": "✅",
+          "synthesis_confidence": "HIGH"
+        },
+        "15m_synthesis": {
+          "agreement_level": "GOOD",
+          "visual_insights_summary": "15M chart shows a pristine untested bearish OB at 1.1520–1.1528 with a bullish pin bar near 1.1470 indicating retracement intent toward supply zone.",
+          "json_confirmations_summary": "JSON confirms OB untouched and small bullish FVGs forming, aligning with retracement expectation.",
+          "discrepancies": [
+            "Minor difference: Visual shows pin bar confirmation; JSON shows no BOS yet – typical for pre-retracement."
+          ],
+          "confluence_count": 4,
+          "confidence_boost": "High – 15M retracement phase clearly supports HTF directional bias.",
+          "status_icon": "✅",
+          "synthesis_confidence": "HIGH"
+        },
+        "5m_synthesis": {
+          "agreement_level": "GOOD",
+          "visual_insights_summary": "5M shows a bullish bounce from 1.1480–1.1485 OB forming consecutive bullish candles after V-shaped rejection.",
+          "json_confirmations_summary": "JSON confirms sequential higher closes and accelerating bullish momentum after bounce.",
+          "discrepancies": [
+            "Minor timing lag in JSON momentum measurement but directionally consistent."
+          ],
+          "execution_ready": true,
+          "confidence_boost": "High – 5M confirms retracement move upward, aligning with anticipated touch of 15M/1H supply zone.",
+          "status_icon": "✅",
+          "synthesis_confidence": "HIGH"
+        },
+        "multi_tf_synthesis_score": {
+          "score": 90,
+          "rating": "STRONG",
+          "description": "All 3 timeframes show GOOD visual-JSON agreement; no conflicts. 5M retracement supports 1H bearish direction after reaching supply zone.",
+          "agreement_breakdown": {
+            "htf_1h": "GOOD",
+            "mtf_15m": "GOOD",
+            "ltf_5m": "GOOD",
+            "unanimous": true
+          },
+          "icon": "✅✅✅"
+        }
+      },
+      "timeframe_summary": {
+        "1h": {
+          "bias": "BEARISH",
+          "confidence": "HIGH",
+          "synthesis_agreement": "GOOD",
+          "visual_json_harmony": "Strong bearish structure confirmed visually and by JSON data.",
+          "status_icon": "✅",
+          "key_note": "Clear bearish trend, pristine OB 1.1600–1.1615 unmitigated."
+        },
+        "15m": {
+          "setup_quality": "GOOD",
+          "synthesis_agreement": "GOOD",
+          "visual_json_harmony": "Both sources show healthy retracement preparing to test supply zone.",
+          "alignment_with_htf": "ALIGNED",
+          "status_icon": "✅",
+          "key_note": "Retracement toward 1.1520–1.1528 zone expected before reversal."
+        },
+        "5m": {
+          "signal": "ENTER_LONG (retracement)",
+          "synthesis_agreement": "GOOD",
+          "visual_json_harmony": "Both visual and JSON confirm bullish move to supply zone before short trigger.",
+          "pattern_ready": true,
+          "status_icon": "✅",
+          "key_note": "Accelerating bullish momentum confirms move toward resistance zone."
+        },
+        "alignment": {
+          "synthesis_score": "90/100 (STRONG)",
+          "data_score": "85/100 (GOOD)",
+          "combined_status": "STRONG",
+          "all_agreements": "GOOD across all TFs",
+          "icon": "✅✅"
+        }
+      },
+      "comprehensive_scoring": {
+        "synthesis_alignment_score": 90,
+        "data_alignment_score": 85,
+        "synthesis_confidence_score": 85,
+        "risk_score": 4,
+        "final_score": 87.5,
+        "rating": "STRONG",
+        "breakdown": {
+          "synthesis_contribution": "36.0 (90×0.40)",
+          "data_contribution": "21.25 (85×0.25)",
+          "synthesis_confidence_contribution": "21.25 (85×0.25)",
+          "risk_contribution": "8.0 ((100-4×10)×0.10)"
+        },
+        "agreement_summary": {
+          "htf_1h": "GOOD",
+          "mtf_15m": "GOOD",
+          "ltf_5m": "GOOD",
+          "unanimous": true
+        }
+      },
+      "synthesis_conflict_analysis": {
+        "conflicts_detected": 0,
+        "conflicts": [],
+        "overall_harmony": "GOOD",
+        "description": "No synthesis conflicts detected. All TFs show GOOD alignment; no contradictions between visual and JSON data."
+      },
+      "trading_plan": {
+        "should_trade": false,
+        "confidence_justification": "While multi-timeframe synthesis is strong and no conflicts are detected, 15M analysis shows price still building toward the supply zone. Optimal entry will occur on bearish rejection at 1.1520–1.1528.",
+        "entry": {
+          "method": "DEFERRED SHORT",
+          "price": 1.152,
+          "zone": [
+            1.152,
+            1.1528
+          ],
+          "position_size": "75% of normal",
+          "position_size_reasoning": "Strong visual-JSON harmony across all TFs but trade not yet at desired zone; reduce size slightly.",
+          "synthesis_entry_confirmation": "Wait for bearish 5M confirmation when price tests 1.1520–1.1528 zone."
+        },
+        "risk_management": {
+          "stop_loss": 1.162,
+          "take_profit_1": {
+            "price": 1.1485,
+            "action": "Take partial profit"
+          },
+          "take_profit_2": {
+            "price": 1.145,
+            "action": "Take final profit"
+          },
+          "risk_reward": "Approx. 1:3",
+          "max_risk_percent": "1.5% of capital"
+        },
+        "exit_strategy": {
+          "visual_exit_triggers": [
+            "Bullish BOS on 5M while in short position",
+            "Strong bullish engulfing candle after entry"
+          ],
+          "breakeven_visual_trigger": "Price reaches 1.1490 area - move SL to breakeven."
+        }
+      },
+      "risk_analysis": {
+        "overall_risk_score": 4,
+        "risk_level": "MEDIUM",
+        "visual_risk_factors": [
+          "Awaiting zone test before entering short."
+        ],
+        "data_risk_factors": [
+          "Retracement phase; small potential whipsaw risk."
+        ],
+        "acceptable_for_trading": true,
+        "risk_mitigation": "Wait for confirmation at the OB zone."
+      },
+      "recommendations": {
+        "primary_recommendation": "Wait for price to reach 1.1520–1.1528. Then confirm 5M bearish rejection before entering short.",
+        "rationale": "All three TFs show GOOD agreement and alignment toward HTF bearish bias. However, active retracement underway implies entry patience required. Once rejection confirms at supply, the probability of success will be maximized.",
+        "synthesis_summary": "Visual and JSON agreements are GOOD across all TFs, creating strong bias consistency but requiring final trigger.",
+        "alternative_plan": "If price breaks above 1.162, bearish setup invalidates; reassess bias.",
+        "next_review_time": "Monitor 15M and 5M for touch and rejection near 1.1520–1.1528.",
+        "monitoring_points": [
+          "Watch 15M structure for retracement completion",
+          "Observe 5M price behavior near 1.1520–1.1528 zone",
+          "Enter short only when bearish confirmation appears on 5M"
+        ]
+      },
+      "synthesis_insights": {
+        "what_synthesis_reveals": [
+          "1H: Bearish visual pattern confirmed by JSON FVG and OB data.",
+          "15M: Bullish retracement visual pattern toward resistance confirmed by JSON liquidity data.",
+          "5M: Intraday bullish momentum visual pattern confirmed by JSON data, representing retracement phase."
+        ],
+        "why_synthesis_matters": "Consistent visual-JSON synthesis across TFs ensures signal legitimacy; alignment suggests short bias confirmation after retracement.",
+        "synthesis_edge": "High-confidence multi-TF confluence enables precise timing once rejection occurs at predefined OB zone.",
+        "agreement_power": "GOOD agreement across all TFs yields STRONG readiness; patience ensures best strike point."
+      },
+      "alerts": [],
+      "execution_checklist": [
+        "✅ 1H synthesis - GOOD alignment (Bearish bias confirmed)",
+        "✅ 15M synthesis - GOOD alignment (retracement phase)",
+        "✅ 5M synthesis - GOOD alignment (retracement support)",
+        "✅ Multi-TF synthesis - STRONG (90/100)",
+        "✅ Data alignment - GOOD (85/100)",
+        "✅ Synthesis confidence - HIGH",
+        "✅ No conflicts detected",
+        "⚠️ Wait for price to reach and reject 1.1520–1.1528 zone before shorting",
+        "⚠️ Place stop-loss 1.162; TP1 1.1485; TP2 1.145"
+      ]
+    }
+  }
+]
 ```
-1H: BEARISH structure → Supply zone at 1.1600–1.1615
+
+#### 📋 สรุปการตัดสินใจ (Example 2)
+
+| หัวข้อ | ค่า |
+|--------|-----|
+| **Symbol** | XAUUSD (Gold) |
+| **Timestamp** | 2025-11-05 08:30:00 |
+| **Final Action** | **WAIT** ⏳ |
+| **Direction** | SHORT |
+| **Confidence** | HIGH |
+| **Risk Level** | MEDIUM |
+| **Entry Zone** | 1.1520–1.1528 |
+| **Stop Loss** | 1.1620 |
+| **Take Profit 1** | 1.1485 |
+| **Take Profit 2** | 1.1450 |
+| **Risk:Reward** | 1:3 |
+| **Position Size** | 75% of normal |
+
+**Multi-Timeframe Synthesis:**
+| TF | Agreement | Status | Key Note |
+|----|-----------|--------|----------|
+| **1H** | GOOD ✅ | BEARISH | Pristine OB 1.1600–1.1615 |
+| **15M** | GOOD ✅ | GOOD | Retracement toward 1.1520–1.1528 |
+| **5M** | GOOD ✅ | READY | Bullish bounce to resistance |
+
+**Comprehensive Scoring:**
+```
+Synthesis Score:      90/100 (STRONG)
+Data Score:           85/100 (GOOD)
+Confidence Score:     85/100 (HIGH)
+Risk Score:           4/10 (MEDIUM)
+───────────────────────────────────
+FINAL SCORE:         87.5/100 ⭐⭐⭐⭐⭐
+```
+
+**Conflicts:** 0 (No conflicts detected - UNANIMOUS agreement)
+
+---
+
+### 🔍 Key Insights จากผลลัพธ์จริง
+
+#### 1. Visual-JSON Synthesis (การผสมผสานข้อมูล Visual + JSON)
+
+**Example 1 - 5M EURUSD:**
+- **Visual Analysis:** "Sharp V-shaped bounce from OB zone with consecutive bullish candles"
+- **JSON Confirmation:** "Sequential higher closes from 1.1482 to 1.1495, accelerating momentum"
+- **Agreement:** GOOD ✅
+- **Result:** Immediate ENTER decision with HIGH confidence
+
+**Example 2 - Coordinator XAUUSD:**
+- **Visual Analysis:** "Retracement clearly visible across all 3 timeframes"
+- **JSON Confirmation:** "Bullish FVGs forming, confirming retracement phase"
+- **Agreement:** GOOD across all TFs ✅✅✅
+- **Result:** WAIT decision (patience for optimal entry)
+
+#### 2. Multi-Timeframe Alignment Power
+
+**XAUUSD Perfect Alignment:**
+```
+1H:  BEARISH trend → Supply at 1.1600–1.1615
+      ↓
 15M: Retracement → Moving toward 1.1520–1.1528
-5M: Bullish momentum → Confirming move to resistance
-───────────────────────────────────────────────────
-Result: WAIT for zone touch + bearish rejection
-Confidence: 87.5/100 (STRONG)
+      ↓
+5M:  Bullish momentum → Confirming upward move
+      ↓
+═══════════════════════════════════════════
+Coordinator: WAIT for zone touch + rejection
+Score: 87.5/100 (STRONG)
+Conflicts: 0 (UNANIMOUS)
 ```
 
 #### 3. Quality Over Quantity Philosophy
 
-**XAUUSD Example demonstrates patience:**
-- Score: 87.5/100 (STRONG)
-- All timeframes aligned: ✅✅✅
-- **Decision: WAIT** (not rush into trade)
-- **Reason:** "Optimal entry not yet reached"
+**ระบบแสดงวินัยการเทรด:**
+- Score: 87.5/100 (STRONG) ⭐⭐⭐⭐⭐
+- All TFs aligned: ✅✅✅
+- Decision: **WAIT** (ไม่รีบเข้า)
+- เหตุผล: "ราคายังไม่ถึง optimal entry zone"
 
-This shows the system's discipline: **even with perfect alignment, it waits for the BEST entry point**
+> แสดงให้เห็นว่า แม้ score สูงและ timeframes ทั้งหมด align กัน ระบบก็ยังรอจุดเข้าที่ดีที่สุด
 
 #### 4. Risk Management Integration
 
-**5M EURUSD:**
+**การจัดการความเสี่ยง:**
+
+**5M EURUSD (ENTER NOW):**
 - Entry: 1.1493
-- SL: 1.1480 (13 pips risk)
-- TP1: 1.1500 (7 pips reward) = 1:0.5
-- TP2: 1.1508 (15 pips reward) = 1:1.15
-- **Position: FULL (100%)**
+- SL: 1.1480 (13 pips)
+- TP1: 1.1500 (7 pips) = 1:0.5
+- TP2: 1.1508 (15 pips) = 1:1.15
+- Position: **FULL (100%)**
+- เหตุผล: High confidence, strong confirmation
 
-**Coordinator XAUUSD:**
-- Entry: 1.1520–1.1528 (zone)
-- SL: 1.1620 (92-100 pips risk)
-- TP1: 1.1485 (35-43 pips reward)
-- TP2: 1.1450 (70-78 pips reward)
-- **Position: 75% (reduced due to wait)**
+**Coordinator XAUUSD (WAIT):**
+- Entry Zone: 1.1520–1.1528
+- SL: 1.1620 (92-100 pips)
+- TP1: 1.1485 (35-43 pips)
+- TP2: 1.1450 (70-78 pips)
+- Position: **75% (reduced)**
+- เหตุผล: Strong setup but wait for confirmation
 
-#### 5. Conflict Resolution
+#### 5. Conflict Resolution Excellence
 
 **XAUUSD Analysis:**
-```
-Conflicts Detected: 0
-All TFs Agreement: UNANIMOUS
-Overall Harmony: GOOD
-───────────────────────────
-Result: Clean, confident analysis
+```json
+{
+  "conflicts_detected": 0,
+  "all_tf_agreement": "UNANIMOUS",
+  "overall_harmony": "GOOD",
+  "description": "No conflicts - all TFs aligned"
+}
 ```
 
-When all timeframes agree and no conflicts exist, the system produces **high-confidence actionable plans**
+เมื่อไม่มี conflicts และทุก timeframe เห็นพ้องกัน = **ความมั่นใจสูง**
 
 ---
 
