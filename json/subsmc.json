@@ -1,0 +1,2038 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "09a48e5f-9213-4719-87a7-0dfbe2016563",
+              "leftValue": "={{ $json.output.analysis.market_bias.direction }}",
+              "rightValue": "BEARISH",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "734e11d3-c8dc-4334-a26c-95e96df91a05",
+              "leftValue": "={{ $json.output.analysis.market_bias.direction }}",
+              "rightValue": "BULLISH",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -9552,
+        1296
+      ],
+      "id": "5c984e63-e594-4a76-918a-150eddbcf80c",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- ตัวแปร timeframe ---\nconst agentType = $json.agentType || \"1H\"; // 1H, 15M, 5M\nlet intervalMinutes = 0;\n\nswitch (agentType) {\n  case \"1H\": intervalMinutes = 60; break;\n  case \"15M\": intervalMinutes = 15; break;\n  case \"5M\": intervalMinutes = 5; break;\n}\n\n// --- เวลาปัจจุบัน ---\nconst now = new Date();\n\n// --- ปัดขึ้นให้ตรงรอบ timeframe ---\nconst next = new Date(now);\nnext.setMinutes(Math.ceil(now.getMinutes() / intervalMinutes) * intervalMinutes);\nnext.setSeconds(0, 0);\n\n// ถ้ารอบถัดไป <= ตอนนี้ → บวกเพิ่มอีกหนึ่งรอบ\nif (next <= now) {\n  next.setMinutes(next.getMinutes() + intervalMinutes);\n}\n\n// --- เวลาที่ต้องรอ (ms) ---\nconst waitMs = next - now;\n\n// --- Log เวลา ---\nconsole.log(`🔄 [${agentType}] Next round at ${next.toLocaleTimeString()}`);\nconsole.log(`⏱️ Wait ${(waitMs / 1000 / 60).toFixed(2)} minutes`);\n\n// --- Output สำหรับใช้ต่อใน node Wait ---\nreturn [\n  {\n    json: {\n      agentType,\n      nextRunTime: next.toISOString(),\n      waitMs,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -10000,
+        1488
+      ],
+      "id": "68ddc0b5-e028-4a30-b3ee-c829fd535454",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.waitMs /1000}}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -9312,
+        1488
+      ],
+      "id": "36e6afb2-6225-4e4b-af0f-5561e10d3c3e",
+      "name": "Wait",
+      "webhookId": "bff64c0c-6dba-414a-a122-5ad59f89d61e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e4983a0d-6e67-4a11-be45-5a8851ffce87",
+              "leftValue": "={{ $json.output.analysis.setup_quality.rating }}",
+              "rightValue": "EXCELLENT",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "80fe33fe-4713-4db9-955e-339c9fb40ad2",
+              "leftValue": "={{ $json.output.analysis.setup_quality.rating }}",
+              "rightValue": "GOOD",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -7248,
+        1280
+      ],
+      "id": "8ab641db-3265-4aab-a45f-6a31128e8cdc",
+      "name": "If6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- ตัวแปร timeframe ---\nconst agentType = $json.agentType || \"15M\"; // 1H, 15M, 5M\nlet intervalMinutes = 0;\n\nswitch (agentType) {\n  case \"1H\": intervalMinutes = 60; break;\n  case \"15M\": intervalMinutes = 15; break;\n  case \"5M\": intervalMinutes = 5; break;\n}\n\n// --- เวลาปัจจุบัน ---\nconst now = new Date();\n\n// --- ปัดขึ้นให้ตรงรอบ timeframe ---\nconst next = new Date(now);\nnext.setMinutes(Math.ceil(now.getMinutes() / intervalMinutes) * intervalMinutes);\nnext.setSeconds(0, 0);\n\n// ถ้ารอบถัดไป <= ตอนนี้ → บวกเพิ่มอีกหนึ่งรอบ\nif (next <= now) {\n  next.setMinutes(next.getMinutes() + intervalMinutes);\n}\n\n// --- เวลาที่ต้องรอ (ms) ---\nconst waitMs = next - now;\n\n// --- Log เวลา ---\nconsole.log(`🔄 [${agentType}] Next round at ${next.toLocaleTimeString()}`);\nconsole.log(`⏱️ Wait ${(waitMs / 1000 / 60).toFixed(2)} minutes`);\n\n// --- Output สำหรับใช้ต่อใน node Wait ---\nreturn [\n  {\n    json: {\n      agentType,\n      nextRunTime: next.toISOString(),\n      waitMs,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -8112,
+        1504
+      ],
+      "id": "952159ca-9205-45db-b547-affc38858675",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.waitMs /1000}}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -7840,
+        1504
+      ],
+      "id": "3da4cce7-ac2f-4671-b06d-0eb3c13704e6",
+      "name": "Wait2",
+      "webhookId": "bff64c0c-6dba-414a-a122-5ad59f89d61e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e4983a0d-6e67-4a11-be45-5a8851ffce87",
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -4624,
+        1232
+      ],
+      "id": "8aa67c5f-6534-437c-8dfd-2de66f061f8d",
+      "name": "If7",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- ตัวแปร timeframe ---\nconst agentType = $json.agentType || \"5M\"; // 1H, 15M, 5M\nlet intervalMinutes = 0;\n\nswitch (agentType) {\n  case \"1H\": intervalMinutes = 60; break;\n  case \"15M\": intervalMinutes = 15; break;\n  case \"5M\": intervalMinutes = 5; break;\n}\n\n// --- เวลาปัจจุบัน ---\nconst now = new Date();\n\n// --- ปัดขึ้นให้ตรงรอบ timeframe ---\nconst next = new Date(now);\nnext.setMinutes(Math.ceil(now.getMinutes() / intervalMinutes) * intervalMinutes);\nnext.setSeconds(0, 0);\n\n// ถ้ารอบถัดไป <= ตอนนี้ → บวกเพิ่มอีกหนึ่งรอบ\nif (next <= now) {\n  next.setMinutes(next.getMinutes() + intervalMinutes);\n}\n\n// --- เวลาที่ต้องรอ (ms) ---\nconst waitMs = next - now;\n\n// --- Log เวลา ---\nconsole.log(`🔄 [${agentType}] Next round at ${next.toLocaleTimeString()}`);\nconsole.log(`⏱️ Wait ${(waitMs / 1000 / 60).toFixed(2)} minutes`);\n\n// --- Output สำหรับใช้ต่อใน node Wait ---\nreturn [\n  {\n    json: {\n      agentType,\n      nextRunTime: next.toISOString(),\n      waitMs,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5552,
+        1504
+      ],
+      "id": "44b2ae77-5369-4592-8234-e2a263505d03",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.waitMs /1000}}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -5136,
+        1504
+      ],
+      "id": "f82f5aa2-f6e9-4db2-a3ab-8dc72fc4c7ca",
+      "name": "Wait3",
+      "webhookId": "bff64c0c-6dba-414a-a122-5ad59f89d61e"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -2816,
+        400
+      ],
+      "id": "7fe6e784-b102-45cc-a120-d13bd419226f",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -10048,
+        864
+      ],
+      "id": "d9f6d4dd-989a-4ac2-ae24-8d44afc436fc",
+      "name": "AI Agent7"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-chat-latest",
+          "mode": "list",
+          "cachedResultName": "gpt-5-chat-latest"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -10144,
+        1072
+      ],
+      "id": "3d429d87-0f8c-403c-9a04-57a7ea445755",
+      "name": "OpenAI Chat Model7",
+      "credentials": {
+        "openAiApi": {
+          "id": "ujgFVNhTmI1dd0Sl",
+          "name": "OpenAi account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -7632,
+        864
+      ],
+      "id": "95c8442b-99f1-49fe-ab77-ae65bf2d70d2",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-chat-latest",
+          "mode": "list",
+          "cachedResultName": "gpt-5-chat-latest"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -7728,
+        1072
+      ],
+      "id": "8c91823f-ed4d-4396-ae0f-ed225f63c1d6",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ujgFVNhTmI1dd0Sl",
+          "name": "OpenAi account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -5392,
+        784
+      ],
+      "id": "42a51aa3-39e0-4fc6-9d78-7af74126d5d0",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-chat-latest",
+          "mode": "list",
+          "cachedResultName": "gpt-5-chat-latest"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -5392,
+        960
+      ],
+      "id": "754c2de1-99eb-4e3d-8db9-27e4641c849d",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "ujgFVNhTmI1dd0Sl",
+          "name": "OpenAi account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://bab4feb26393.ngrok-free.app/send-to-n8n?frame=15m&index=100&include_image=true&chart_candles=100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -8832,
+        848
+      ],
+      "id": "54aeead5-7d36-4b61-9bf2-0f03f3ffc230",
+      "name": "HTTP Request17"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a64e8f70-100a-400b-9a33-5538f092b605",
+              "name": "candles",
+              "value": "={{ $json.candles }}",
+              "type": "string"
+            },
+            {
+              "id": "e9f38327-9ea1-411b-b36f-75b9374b1998",
+              "name": "timeframe",
+              "value": "={{ $json.timeframe }}",
+              "type": "string"
+            },
+            {
+              "id": "49574fa0-6163-4674-bd1f-b56de2b8d846",
+              "name": "image_url",
+              "value": "={{ $json.image_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -8560,
+        848
+      ],
+      "id": "47b01af9-ea4d-46a5-ad60-51a66b7d96ce",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "CHATGPT-4O-LATEST"
+        },
+        "text": "=",
+        "imageUrls": "={{ $json.image_url }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -8320,
+        1072
+      ],
+      "id": "32c06c25-87ec-4263-a4bc-90320846a6d4",
+      "name": "Analyze image7",
+      "credentials": {
+        "openAiApi": {
+          "id": "ujgFVNhTmI1dd0Sl",
+          "name": "OpenAi account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -7856,
+        864
+      ],
+      "id": "87771d3a-adb5-4a66-a770-3fefd86ada02",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a64e8f70-100a-400b-9a33-5538f092b605",
+              "name": "candles",
+              "value": "={{ $json.candles }}",
+              "type": "string"
+            },
+            {
+              "id": "e9f38327-9ea1-411b-b36f-75b9374b1998",
+              "name": "timeframe",
+              "value": "={{ $json.timeframe }}",
+              "type": "string"
+            },
+            {
+              "id": "49574fa0-6163-4674-bd1f-b56de2b8d846",
+              "name": "image_url",
+              "value": "={{ $json.image_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -11200,
+        848
+      ],
+      "id": "18915b50-fffa-4cc5-b3b5-c111d2596921",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "CHATGPT-4O-LATEST"
+        },
+        "text": "=",
+        "imageUrls": "={{ $json.image_url }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -11040,
+        1008
+      ],
+      "id": "fbcf6ab1-6d2f-4677-a912-ffc35b5b707f",
+      "name": "Analyze image8",
+      "credentials": {
+        "openAiApi": {
+          "id": "ujgFVNhTmI1dd0Sl",
+          "name": "OpenAi account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -10432,
+        864
+      ],
+      "id": "5114343c-1e7c-4b3c-adb1-032427beb73d",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {
+        "url": "https://bab4feb26393.ngrok-free.app/send-to-n8n?frame=1h&index=100&include_image=true&chart_candles=100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -11600,
+        848
+      ],
+      "id": "b3028ef5-f23d-40fe-b8fb-9ad5c75c92e8",
+      "name": "HTTP Request20"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ceae248-d1aa-40c7-ae8b-8288ee1d7a56",
+              "name": "content",
+              "value": "={{ $json.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -10832,
+        1008
+      ],
+      "id": "58f79a45-7a33-4ce7-825f-5300c49deec2",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({\n  json: {\n    content: item.json.content\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -10624,
+        1008
+      ],
+      "id": "b947e28f-afc0-47db-9ce5-8307cc430ae3",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"timeframe\": \"1h\",\n  \"timestamp\": \"2025-10-27T10:30:00\",\n  \"symbol\": \"EURUSD\",\n\n  \"analysis\": {\n    \"market_bias\": {\n      \"direction\": \"BULLISH|BEARISH|NEUTRAL\",\n      \"confidence\": \"HIGH|MEDIUM|LOW\",\n      \"reasoning\": \"string - synthesize visual + JSON insights (3-4 sentences)\",\n      \"structure_type\": \"TRENDING|RANGING|REVERSAL\",\n      \"visual_weight\": \"40%\",\n      \"json_weight\": \"35%\",\n      \"confluence_weight\": \"25%\"\n    },\n\n    \"key_levels\": {\n      \"major_order_blocks\": [\n        {\n          \"type\": \"bullish|bearish\",\n          \"top\": 4080.5,\n          \"bottom\": 4078.8,\n          \"strength\": 0.85,\n          \"visual_quality\": \"PRISTINE|CLEAN|TESTED|MITIGATED\",\n          \"status\": \"active|mitigated\",\n          \"confluence_factors\": [\n            \"Trendline support (visual)\",\n            \"Previous swing low (JSON)\",\n            \"High OB percentage (JSON: 0.85)\"\n          ]\n        }\n      ],\n      \"significant_fvg\": [\n        {\n          \"type\": \"bullish|bearish\",\n          \"top\": 4082.0,\n          \"bottom\": 4080.5,\n          \"status\": \"unfilled|partial|filled\",\n          \"candle_index\": 50,\n          \"visual_confirmation\": \"Clearly visible gap on chart\"\n        }\n      ],\n      \"liquidity_zones\": {\n        \"buy_stops\": [\n          {\"level\": 4085.0, \"swept\": false, \"importance\": \"high\", \"visual_cluster\": true}\n        ],\n        \"sell_stops\": [\n          {\"level\": 4075.0, \"swept\": false, \"importance\": \"high\", \"visual_cluster\": true}\n        ]\n      }\n    },\n\n    \"structure_analysis\": {\n      \"recent_bos\": {\n        \"type\": \"bullish|bearish|none\",\n        \"level\": 4077.5,\n        \"candle_index\": 48,\n        \"strength\": \"strong|moderate|weak\",\n        \"visual_confirmation\": \"BOS label visible on chart at this level\"\n      },\n      \"recent_choch\": {\n        \"type\": \"bullish|bearish|none\",\n        \"level\": 4076.0,\n        \"candle_index\": 42,\n        \"strength\": \"strong|moderate|weak\",\n        \"visual_confirmation\": \"string or null\"\n      },\n      \"swing_structure\": {\n        \"pattern\": \"HH_HL|LH_LL|RANGING\",\n        \"recent_high\": 4085.5,\n        \"recent_low\": 4070.2,\n        \"visual_clarity\": \"CRYSTAL_CLEAR|CLEAR|MODERATE|UNCLEAR\"\n      }\n    },\n\n    \"session_info\": {\n      \"current_session\": \"Asian|London|NewYork|Overlap|None\",\n      \"session_high\": 4086.0,\n      \"session_low\": 4072.0,\n      \"in_kill_zone\": \"true|false\"\n    }\n  },\n\n  \"visual_json_synthesis\": {\n    \"agreement_level\": \"PERFECT|GOOD|PARTIAL|CONFLICT\",\n    \"visual_insights_used\": [\n      \"Clear HH_HL structure visible\",\n      \"Pristine bullish OB at 4078-4080\",\n      \"Ascending trendline holding with 4 touches\"\n    ],\n    \"json_confirmations\": [\n      \"BOS=1 at level 4082.0 confirms visual BOS label\",\n      \"OB percentage 0.87 validates visual PRISTINE quality\",\n      \"Swing pattern HH_HL matches visual structure\"\n    ],\n    \"discrepancies\": [\n      \"Minor timing difference in BOS (visual shows slightly earlier)\"\n    ],\n    \"confidence_boost\": \"Visual clarity + JSON confirmation = High confidence in bullish bias\"\n  },\n\n  \"guidance_for_15m\": {\n    \"preferred_direction\": \"LONG|SHORT|WAIT\",\n    \"entry_zones\": [\n      {\n        \"zone_description\": \"Bullish OB at 4078-4080 (pristine quality)\",\n        \"price_range\": [4078.8, 4080.5],\n        \"type\": \"OB\",\n        \"priority\": \"high\",\n        \"visual_characteristics\": \"Purple rectangle, untouched, clear boundaries\",\n        \"confluence_factors\": [\n          \"HTF OB (visual: pristine, JSON: 0.87 strength)\",\n          \"Trendline support intersection\",\n          \"Previous swing low alignment\"\n        ]\n      }\n    ],\n    \"invalidation_level\": 4075.0,\n    \"notes\": \"Look for 15M entry patterns at 4078-4080 zone. Visual shows clean setup, JSON confirms strong OB. High probability area.\"\n  },\n\n  \"warnings\": [\n    \"string - any concerns or conflicting signals\"\n  ]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -9888,
+        1056
+      ],
+      "id": "f6a20cbe-8b38-4fd6-859c-2d2d70e90538",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ceae248-d1aa-40c7-ae8b-8288ee1d7a56",
+              "name": "content",
+              "value": "={{ $json.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -8112,
+        1072
+      ],
+      "id": "b184cb6e-5429-4ae6-a377-4efe25671ff9",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({\n  json: {\n    content: item.json.content\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -7968,
+        1072
+      ],
+      "id": "a5f3cb2a-8960-499a-b1d9-b9e71adddb92",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "760778b5-770f-4010-93c3-aabd6b289aed",
+              "name": "guidance_for_15m",
+              "value": "={{ $json.output.guidance_for_15m }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -9024,
+        848
+      ],
+      "id": "7471d7df-8a20-4aa1-8e85-3f5f28834341",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "=\n{\n  \"timeframe\": \"15m\",\n  \"timestamp\": \"2025-10-27T14:30:00\",\n  \"symbol\": \"EURUSD\",\n\n  \"analysis\": {\n    \"htf_zone_validation\": {\n      \"zone_visible\": true,\n      \"zone_quality_15m\": \"PRISTINE|CLEAN|TESTED|MITIGATED\",\n      \"test_count\": 1,\n      \"visual_description\": \"Zone appears clean on 15M with single test and strong rejection\",\n      \"json_confirmation\": \"OB Percentage 0.82, not mitigated\"\n    },\n\n    \"setup_quality\": {\n      \"rating\": \"EXCELLENT|GOOD|FAIR|POOR\",\n      \"confidence\": \"VERY_HIGH|HIGH|MEDIUM|LOW\",\n      \"reasoning\": \"Synthesize visual pattern quality + JSON confirmations + confluence (3-4 sentences)\",\n      \"visual_weight\": \"35%\",\n      \"json_weight\": \"30%\",\n      \"confluence_weight\": \"20%\",\n      \"htf_alignment_weight\": \"15%\"\n    },\n\n    \"entry_pattern_analysis\": {\n      \"patterns_detected\": [\n        {\n          \"pattern\": \"Bullish pin bar\",\n          \"quality\": \"TEXTBOOK\",\n          \"location\": \"At zone edge 4078.5\",\n          \"completion\": \"FULLY_FORMED\",\n          \"confirmation\": \"Next candle green, closing above\",\n          \"visual_description\": \"Long 18-pip lower wick, small body at top\",\n          \"json_validation\": \"Candle structure in JSON confirms long lower wick\"\n        }\n      ],\n      \"best_pattern\": \"Bullish pin bar\",\n      \"pattern_readiness\": \"READY|ALMOST|NOT_YET\"\n    },\n\n    \"confluence_analysis\": {\n      \"factors_present\": [\n        \"HTF Order Block (visual: CLEAN, JSON: 0.82)\",\n        \"15M trendline support (visual)\",\n        \"Previous swing low (JSON + visual)\",\n        \"Round number 4080 (visual)\",\n        \"Bullish FVG below (JSON)\",\n        \"Liquidity sweep (visual evidence)\"\n      ],\n      \"confluence_count\": 6,\n      \"confluence_rating\": \"EXCELLENT (5-7)|GOOD (3-4)|FAIR (2)|WEAK (0-1)\",\n      \"visual_confirmation\": \"Multiple factors clearly stacked at zone\",\n      \"json_confirmation\": \"JSON data validates 4 out of 6 factors\"\n    },\n\n    \"rejection_quality\": {\n      \"present\": true,\n      \"strength\": \"STRONG|MODERATE|WEAK\",\n      \"type\": \"V-shape|U-shape|Grind\",\n      \"wick_quality\": \"Long clean wicks|Medium|Short\",\n      \"bounce_style\": \"Sharp immediate|Gradual|Slow\",\n      \"visual_description\": \"Clean V-shape rejection with 18-pip wick\",\n      \"json_validation\": \"Low wicks visible in candle data, bodies closing above zone\"\n    },\n\n    \"structure_alignment\": {\n      \"15m_direction\": \"BULLISH|BEARISH|NEUTRAL\",\n      \"15m_pattern\": \"HH_HL|LH_LL|MIXED\",\n      \"15m_clarity\": \"CLEAR|MODERATE|CHOPPY\",\n      \"htf_alignment\": \"ALIGNED|NEUTRAL|CONFLICTING\",\n      \"alignment_description\": \"15M bullish structure fully supports HTF bullish bias\",\n      \"json_swing_confirmation\": \"JSON shows HH_HL pattern on 15M\"\n    }\n  },\n\n  \"visual_json_synthesis\": {\n    \"agreement_level\": \"PERFECT|GOOD|PARTIAL|CONFLICT\",\n    \"visual_insights_used\": [\n      \"CLEAN HTF zone quality with single test\",\n      \"TEXTBOOK pin bar pattern at 4078.5\",\n      \"6/8 confluence factors present\",\n      \"STRONG V-shape rejection\"\n    ],\n    \"json_confirmations\": [\n      \"OB Percentage 0.82 validates CLEAN visual quality\",\n      \"Candle structure confirms pin bar pattern\",\n      \"Swing pattern HH_HL matches visual bullish structure\",\n      \"No mitigation index confirms zone integrity\"\n    ],\n    \"discrepancies\": [\n      \"None - perfect visual-JSON alignment\"\n    ],\n    \"confidence_impact\": \"Visual + JSON perfect alignment → Very High confidence\"\n  },\n\n  \"guidance_for_5m\": {\n    \"proceed_to_5m\": \"YES|NO|CAUTIOUS\",\n    \"entry_zone\": {\n      \"price_range\": [4078.8, 4080.5],\n      \"type\": \"OB\",\n      \"visual_characteristics\": \"Look for rejection at lower edge (4078-4079), pin bars or engulfing patterns\",\n      \"entry_trigger\": \"5M confirmation candle closing above 4079 after touch\"\n    },\n    \"what_to_watch\": [\n      \"5M rejection wicks at 4078-4079 zone\",\n      \"Hammer or engulfing pattern on 5M\",\n      \"Momentum building with green candles\"\n    ],\n    \"invalidation\": {\n      \"level\": 4077.5,\n      \"condition\": \"15M close below this level invalidates setup\"\n    },\n    \"notes\": \"High-quality setup. Visual shows EXCELLENT pattern + STRONG rejection. JSON confirms. Ready for 5M entry confirmation.\"\n  },\n\n  \"warnings\": [\n    \"string - any concerns or cautionary notes\"\n  ]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -7488,
+        1088
+      ],
+      "id": "7a33239d-08b1-4b88-a8a2-0c65574dd58f",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "url": "=https://bab4feb26393.ngrok-free.app/send-to-n8n?frame=5m&index=100&include_image=true&chart_candles=100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -6624,
+        912
+      ],
+      "id": "b592d92c-bc1a-44e0-9eb4-b8dcc790981e",
+      "name": "HTTP Request21"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a64e8f70-100a-400b-9a33-5538f092b605",
+              "name": "candles",
+              "value": "={{ $json.candles }}",
+              "type": "string"
+            },
+            {
+              "id": "e9f38327-9ea1-411b-b36f-75b9374b1998",
+              "name": "timeframe",
+              "value": "={{ $json.timeframe }}",
+              "type": "string"
+            },
+            {
+              "id": "49574fa0-6163-4674-bd1f-b56de2b8d846",
+              "name": "image_url",
+              "value": "={{ $json.image_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -6352,
+        912
+      ],
+      "id": "68363db5-05a8-4e6b-803d-4e45feed95aa",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "CHATGPT-4O-LATEST"
+        },
+        "text": "=",
+        "imageUrls": "={{ $json.image_url }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -6112,
+        1136
+      ],
+      "id": "d20c251c-aa2d-4d5f-9201-376d4eed7348",
+      "name": "Analyze image9",
+      "credentials": {
+        "openAiApi": {
+          "id": "ujgFVNhTmI1dd0Sl",
+          "name": "OpenAi account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -5648,
+        928
+      ],
+      "id": "52dd714d-c5a0-42c5-b5da-5579208b4af7",
+      "name": "Merge5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ceae248-d1aa-40c7-ae8b-8288ee1d7a56",
+              "name": "content",
+              "value": "={{ $json.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -5904,
+        1136
+      ],
+      "id": "c6622f96-99c6-4484-94f7-e4e469844207",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({\n  json: {\n    content: item.json.content\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5760,
+        1136
+      ],
+      "id": "a1e53b6a-478d-49ac-af98-6ce599b904bc",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "760778b5-770f-4010-93c3-aabd6b289aed",
+              "name": "guidance_for_5m",
+              "value": "={{ $json.output.guidance_for_5m }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -6816,
+        912
+      ],
+      "id": "95c1efd6-f1f2-4548-a0ba-652765481f1e",
+      "name": "Edit Fields9"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "\n{\n  \"timeframe\": \"5m\",\n  \"timestamp\": \"2025-10-27T14:35:00\",\n  \"symbol\": \"EURUSD\",\n\n  \"analysis\": {\n    \"current_candle_analysis\": {\n      \"type\": \"Bullish hammer\",\n      \"body_size\": \"SMALL\",\n      \"wicks\": {\"upper\": \"SHORT\", \"lower\": \"LONG (14 pips)\"},\n      \"close_position\": \"Near HIGH\",\n      \"status\": \"CLOSED\",\n      \"price\": 4079.2,\n      \"signal\": \"Strong bullish rejection with long lower wick, buyers in control\",\n      \"visual_description\": \"Textbook hammer at entry zone bottom\",\n      \"json_confirmation\": \"JSON candle data confirms: low=4078.0, close=4079.2, body type=bullish\"\n    },\n\n    \"entry_trigger\": {\n      \"status\": \"TRIGGERED|ALMOST|NOT_YET|INVALIDATED\",\n      \"pattern_detected\": \"Hammer Confirmation\",\n      \"pattern_completion\": \"FULLY_FORMED|FORMING|PENDING\",\n      \"confirmation_candle\": \"PRESENT - green candle closed above hammer\",\n      \"ready_score\": \"5/5\",\n      \"visual_evidence\": \"Hammer formed + next candle green + momentum building\",\n      \"json_validation\": \"Pattern structure confirmed in JSON candle data\"\n    },\n\n    \"execution_decision\": {\n      \"action\": \"ENTER_NOW|WAIT_1_CANDLE|WAIT_2_CANDLES|HOLD|SKIP\",\n      \"confidence\": \"VERY_HIGH|HIGH|MEDIUM|LOW\",\n      \"reasoning\": \"Synthesize: current candle signal + pattern completion + momentum + rejection quality + visual-JSON agreement (3-4 sentences)\",\n      \"visual_weight\": \"40%\",\n      \"json_weight\": \"30%\",\n      \"15m_quality_weight\": \"30%\"\n    },\n\n    \"position_details\": {\n      \"price_location\": \"APPROACHING|IN_ZONE|BOUNCING|BREAKING\",\n      \"distance_from_zone\": \"2 pips above entry zone\",\n      \"zone_interaction\": \"Bounced from 4078-4080, moving away upward\",\n      \"visual_description\": \"Price touched zone bottom, strong rejection, now moving up\",\n      \"json_confirmation\": \"Current price 4079.2, zone top 4080.5, bouncing confirmed\"\n    },\n\n    \"momentum_assessment\": {\n      \"direction\": \"CLEAR UP|CLEAR DOWN|CHOPPY|UNCLEAR\",\n      \"state\": \"ACCELERATING|STEADY|FADING|REVERSING\",\n      \"candle_sequence\": \"R R G G G G G (last 7 candles)\",\n      \"body_sizes\": \"INCREASING\",\n      \"speed\": \"FAST|MODERATE|SLOW\",\n      \"visual_momentum\": \"String of green candles with increasing body sizes\",\n      \"json_momentum\": \"Last 5 candles show upward progression in JSON\"\n    },\n\n    \"rejection_quality\": {\n      \"present\": true,\n      \"strength\": \"STRONG|MODERATE|WEAK\",\n      \"type\": \"Sharp V-shape|U-shape|Slow grind\",\n      \"wick_length\": \"14 pips (long)\",\n      \"bounce_style\": \"Sharp immediate recovery\",\n      \"visual_description\": \"Clean V-shape rejection from 4078.0 to 4079.2\",\n      \"json_confirmation\": \"Large lower wick visible in candle data: low=4078.0 vs body=4078.5-4079.2\"\n    }\n  },\n\n  \"visual_json_synthesis\": {\n    \"agreement_level\": \"PERFECT|GOOD|PARTIAL|CONFLICT\",\n    \"visual_insights_used\": [\n      \"Bullish hammer at zone bottom (CLOSED)\",\n      \"Long 14-pip lower wick = strong rejection\",\n      \"Next candle green confirming pattern\",\n      \"Momentum ACCELERATING with string of greens\",\n      \"Visual trigger TRIGGERED, ready score 5/5\"\n    ],\n    \"json_confirmations\": [\n      \"JSON candle structure: low=4078.0, close=4079.2 confirms hammer\",\n      \"Long lower wick present in JSON data\",\n      \"Recent candles show upward progression\",\n      \"Zone not broken: current price above zone\"\n    ],\n    \"discrepancies\": [\n      \"None - visual and JSON perfectly aligned\"\n    ],\n    \"confidence_impact\": \"Perfect visual-JSON alignment + 15M EXCELLENT setup = Very High confidence entry\"\n  },\n\n  \"trade_execution\": {\n    \"enter\": true,\n    \"entry_price\": 4079.5,\n    \"stop_loss\": 4077.5,\n    \"take_profit_1\": 4083.0,\n    \"take_profit_2\": 4086.0,\n    \"risk_reward\": \"1:1.7 (TP1) / 1:3.3 (TP2)\",\n    \"position_size\": \"FULL|HALF|THIRD\",\n    \"notes\": \"High-quality setup. Textbook hammer at HTF OB. Strong rejection. Momentum accelerating. All timeframes aligned.\"\n  },\n\n  \"warnings\": [\n    \"string - any concerns or notes\"\n  ]\n}\n\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -5168,
+        944
+      ],
+      "id": "b5b57760-f146-4228-8ca1-df83d9e990b7",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -7040,
+        1184
+      ],
+      "id": "e7e1f10d-c585-4ff3-927c-f8d9dc1331e3",
+      "name": "Wait4",
+      "webhookId": "4de62b82-249d-452b-a348-858a74c4b44a"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -9344,
+        1200
+      ],
+      "id": "6fd22d7c-e436-4ac7-97da-c43fe5818f37",
+      "name": "Wait5",
+      "webhookId": "e56ef050-c644-438e-abad-92d162f7c2ce"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a2b2d85-06eb-4846-8478-ac9ec2509cd8",
+              "name": "=data",
+              "value": "={{ $json.output.trade_execution.enter }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -4896,
+        1024
+      ],
+      "id": "52c8c888-1c9a-415b-a72e-06af0c2f6c0e",
+      "name": "Edit Fields10"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "916549bd-18e1-440f-93d4-a12b30a00073",
+              "leftValue": "={{ $json.close_last_candel }}",
+              "rightValue": "={{ $json['data_-1atr'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3376,
+        1248
+      ],
+      "id": "874ee42b-1827-4782-9839-87ede5a21536",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "https://bab4feb26393.ngrok-free.app/send-to-n8n?frame=1d&index=14&include_image=true&chart_candles=100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4240,
+        1232
+      ],
+      "id": "2ad223ee-99eb-4429-860e-7ca1404bb3c2",
+      "name": "HTTP Request22"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =====================================\n// ✅ ATR Calculation (Wilder's RMA)\n// =====================================\nconst input = items[0].json;\nconst candles = input.candles;\n\nconst period = 14;\nif (candles.length < period + 1) {\n  return [{ json: { error: \"Not enough candles to calculate ATR\" } }];\n}\n\n// Step 1: คำนวณ True Range\nlet tr = [];\nfor (let i = 1; i < candles.length; i++) {\n  const high = candles[i].high;\n  const low = candles[i].low;\n  const prevClose = candles[i - 1].close;\n  tr.push(Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose)));\n}\n\n// Step 2: ใช้ Wilder’s smoothing (RMA)\nlet atr = [];\nlet firstATR = tr.slice(0, period).reduce((a, b) => a + b, 0) / period; // ค่าแรก\natr.push(firstATR);\nfor (let i = period; i < tr.length; i++) {\n  const nextATR = (atr[atr.length - 1] * (period - 1) + tr[i]) / period;\n  atr.push(nextATR);\n}\n\n// Step 3: ใช้ ATR ล่าสุด\nconst lastATR = atr[atr.length - 1];\nconst prevClose = candles[candles.length - 1].close;\n\n// Step 4: สร้างระดับราคา\nconst atrLevels = {\n  \"+1ATR\": parseFloat((prevClose + lastATR).toFixed(2)),\n  \"-1ATR\": parseFloat((prevClose - lastATR).toFixed(2)),\n  \"+2ATR\": parseFloat((prevClose + 2 * lastATR).toFixed(2)),\n  \"-2ATR\": parseFloat((prevClose - 2 * lastATR).toFixed(2)),\n  \"+3ATR\": parseFloat((prevClose + 3 * lastATR).toFixed(2)),\n  \"-3ATR\": parseFloat((prevClose - 3 * lastATR).toFixed(2))\n};\n\n// Step 5: Return\nreturn [\n  {\n    json: {\n      timeframe: input.timeframe,\n      prevClose,\n      ATR: parseFloat(lastATR.toFixed(2)),\n      atrLevels,\n      table: [\n        { Range: \"ATR\", Value: parseFloat(lastATR.toFixed(2)) },\n        { Range: \"Prev Close\", Value: prevClose },\n        { Range: \"+1ATR\", Value: atrLevels[\"+1ATR\"] },\n        { Range: \"-1ATR\", Value: atrLevels[\"-1ATR\"] },\n        { Range: \"+2ATR\", Value: atrLevels[\"+2ATR\"] },\n        { Range: \"-2ATR\", Value: atrLevels[\"-2ATR\"] },\n        { Range: \"+3ATR\", Value: atrLevels[\"+3ATR\"] },\n        { Range: \"-3ATR\", Value: atrLevels[\"-3ATR\"] }\n      ]\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3936,
+        1152
+      ],
+      "id": "dc6cff67-49f6-465f-ba0f-126708818b15",
+      "name": "Code in JavaScript8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66c90e2d-7acb-44c0-aea6-1ee766a6f3ec",
+              "name": "close_last_candel",
+              "value": "={{ $json.candles[14].close }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3952,
+        1360
+      ],
+      "id": "b846a9da-80ab-4729-8131-5669497b6001",
+      "name": "Edit Fields11"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7513cc9e-cce5-4290-97ab-bbb88bd6a511",
+              "name": "data_-1atr",
+              "value": "={{ $json.atrLevels['-1ATR'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3728,
+        1152
+      ],
+      "id": "2504af7c-e8d0-4450-a9fa-de4ce78dbcfd",
+      "name": "Edit Fields12"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -3552,
+        1264
+      ],
+      "id": "12c64899-642d-4964-8144-4aff95c836c3",
+      "name": "Merge6"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -2288,
+        128
+      ],
+      "id": "480b5ff5-e9e2-4c84-a5f7-62262a77fe55",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1744,
+        128
+      ],
+      "id": "80883469-a27b-409a-9041-544072f7b506",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-chat-latest",
+          "mode": "list",
+          "cachedResultName": "gpt-5-chat-latest"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1920,
+        384
+      ],
+      "id": "23dd2f59-86ea-4e8f-a25b-4d6b7e236406",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "ujgFVNhTmI1dd0Sl",
+          "name": "OpenAi account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-4845186808",
+        "text": "={{ $json.data[0].text1 }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        -64
+      ],
+      "id": "88fe9f5a-4fef-4667-aaf5-5071591f8a48",
+      "name": "Send a text message1",
+      "webhookId": "391327d1-24d4-435b-acb1-ef25251293b1",
+      "credentials": {
+        "telegramApi": {
+          "id": "78jboHQhB2FTXyko",
+          "name": "Telegram account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "985ee896-14f2-474f-b90a-1cd3c0106093",
+              "name": "dataTF1H",
+              "value": "={{ $json.data[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "6b6cc3a0-788a-43c2-964c-9b8127a6644a",
+              "name": "dataTF15M",
+              "value": "={{ $json.data[1] }}",
+              "type": "string"
+            },
+            {
+              "id": "b706016b-fe35-4c72-8bff-2b1905586c64",
+              "name": "dataTF5M",
+              "value": "={{ $json.data[2] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2080,
+        128
+      ],
+      "id": "db766710-21f3-4be7-893e-b4320c7f64e4",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -496,
+        128
+      ],
+      "id": "562b9e2b-43f1-41f3-90a9-139d73d05d0b",
+      "name": "Wait1",
+      "webhookId": "60df50d5-9cbe-475f-a411-30b194af3447"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"coordinator_decision\": {\n    \"timestamp\": \"2025-10-27T10:45:00\",\n    \"symbol\": \"BTCUSDT\",\n    \"final_action\": \"TRADE|WAIT|NO_TRADE\",\n    \"direction\": \"LONG|SHORT|NONE\",\n    \"confidence\": \"VERY_HIGH|HIGH|MEDIUM|LOW\",\n    \"risk_level\": \"LOW|MEDIUM|HIGH\",\n    \"urgency\": \"IMMEDIATE|NORMAL|LOW\"\n  },\n\n  \"multi_timeframe_synthesis_summary\": {\n    \"1h_synthesis\": {\n      \"agreement_level\": \"PERFECT\",\n      \"visual_insights_summary\": \"Clear HH_HL structure, strong trendline (4 touches), pristine bullish OB at 4078-4080\",\n      \"json_confirmations_summary\": \"BOS=1 confirms visual label, OB percentage 0.87 validates PRISTINE quality\",\n      \"discrepancies\": [],\n      \"confidence_boost\": \"Visual clarity + JSON perfect alignment = HIGH confidence\",\n      \"status_icon\": \"✅\",\n      \"synthesis_confidence\": \"HIGH\"\n    },\n    \"15m_synthesis\": {\n      \"agreement_level\": \"PERFECT\",\n      \"visual_insights_summary\": \"HTF zone CLEAN on 15M, textbook pin bar with 15-pip wick, local structure ALIGNED\",\n      \"json_confirmations_summary\": \"15M BOS confirms bullish structure, OB percentage 0.82, zone valid\",\n      \"discrepancies\": [],\n      \"confluence_count\": 6,\n      \"confidence_boost\": \"Visual TEXTBOOK pattern + JSON validation = VERY HIGH confidence\",\n      \"status_icon\": \"✅\",\n      \"synthesis_confidence\": \"VERY HIGH\"\n    },\n    \"5m_synthesis\": {\n      \"agreement_level\": \"PERFECT\",\n      \"visual_insights_summary\": \"Bullish hammer CLOSED at 4079.2, price BOUNCING from zone, momentum ACCELERATING\",\n      \"json_confirmations_summary\": \"Candles show increasing bullish bodies, price in zone, structure intact\",\n      \"discrepancies\": [],\n      \"execution_ready\": true,\n      \"confidence_boost\": \"Visual ENTER_NOW + JSON pattern validation = VERY HIGH confidence\",\n      \"status_icon\": \"✅\",\n      \"synthesis_confidence\": \"VERY HIGH\"\n    },\n    \"multi_tf_synthesis_score\": {\n      \"score\": 100,\n      \"rating\": \"UNANIMOUS\",\n      \"description\": \"All 3 timeframes show PERFECT visual-JSON agreement. Complete synthesis harmony across HTF bias, MTF setup, and LTF execution.\",\n      \"agreement_breakdown\": {\n        \"htf_1h\": \"PERFECT\",\n        \"mtf_15m\": \"PERFECT\",\n        \"ltf_5m\": \"PERFECT\",\n        \"unanimous\": true\n      },\n      \"icon\": \"✅✅✅\"\n    }\n  },\n\n  \"timeframe_summary\": {\n    \"1h\": {\n      \"bias\": \"BULLISH\",\n      \"confidence\": \"HIGH\",\n      \"synthesis_agreement\": \"PERFECT\",\n      \"visual_json_harmony\": \"Complete alignment between visual description and JSON data\",\n      \"status_icon\": \"✅\",\n      \"key_note\": \"Visual: Clear HH_HL structure, pristine OB. JSON: BOS=1, OB 87% confirms.\"\n    },\n    \"15m\": {\n      \"setup_quality\": \"EXCELLENT\",\n      \"synthesis_agreement\": \"PERFECT\",\n      \"visual_json_harmony\": \"Textbook pattern in both visual and data\",\n      \"alignment_with_htf\": \"ALIGNED\",\n      \"status_icon\": \"✅\",\n      \"key_note\": \"Visual: Pin bar at zone, 6 confluence. JSON: BOS confirms, OB 82% valid.\"\n    },\n    \"5m\": {\n      \"signal\": \"ENTER_LONG\",\n      \"synthesis_agreement\": \"PERFECT\",\n      \"visual_json_harmony\": \"Execution trigger confirmed by both sources\",\n      \"pattern_ready\": true,\n      \"status_icon\": \"✅\",\n      \"key_note\": \"Visual: Hammer CLOSED, BOUNCING. JSON: Bullish bodies, structure intact.\"\n    },\n    \"alignment\": {\n      \"synthesis_score\": \"100/100 (UNANIMOUS)\",\n      \"data_score\": \"100/100 (EXCELLENT)\",\n      \"combined_status\": \"PERFECT\",\n      \"all_agreements\": \"PERFECT on all 3 TFs\",\n      \"icon\": \"✅✅✅\"\n    }\n  },\n\n  \"comprehensive_scoring\": {\n    \"synthesis_alignment_score\": 100,\n    \"data_alignment_score\": 100,\n    \"synthesis_confidence_score\": 95,\n    \"risk_score\": 2,\n    \"final_score\": 98.5,\n    \"rating\": \"EXCEPTIONAL\",\n    \"breakdown\": {\n      \"synthesis_contribution\": \"40.0 (100 × 0.40)\",\n      \"data_contribution\": \"25.0 (100 × 0.25)\",\n      \"synthesis_confidence_contribution\": \"23.75 (95 × 0.25)\",\n      \"risk_contribution\": \"9.8 ((100-2) × 0.10)\"\n    },\n    \"agreement_summary\": {\n      \"htf_1h\": \"PERFECT\",\n      \"mtf_15m\": \"PERFECT\",\n      \"ltf_5m\": \"PERFECT\",\n      \"unanimous\": true\n    }\n  },\n\n  \"synthesis_conflict_analysis\": {\n    \"conflicts_detected\": 0,\n    \"conflicts\": [],\n    \"overall_harmony\": \"PERFECT\",\n    \"description\": \"No synthesis conflicts detected. All 3 timeframes show PERFECT visual-JSON agreement. Complete harmony from HTF bias through MTF setup to LTF execution.\"\n  },\n\n  \"trading_plan\": {\n    \"should_trade\": true,\n    \"confidence_justification\": \"EXCEPTIONAL setup: Synthesis UNANIMOUS (100/100) + Data alignment EXCELLENT (100/100) + All synthesis confidence HIGH/VERY HIGH + Risk score LOW (2/10) = Perfect opportunity with complete visual-JSON harmony\",\n    \"entry\": {\n      \"method\": \"MARKET\",\n      \"price\": 4079.5,\n      \"zone\": [4078.8, 4080.5],\n      \"position_size\": \"100% of normal\",\n      \"position_size_reasoning\": \"Perfect alignment across all dimensions: Synthesis UNANIMOUS (all 3 TFs PERFECT agreement), Data EXCELLENT, Synthesis Confidence VERY HIGH, Risk LOW. Maximum position size fully justified by complete harmony between visual analysis and JSON validation.\",\n      \"synthesis_entry_confirmation\": \"All 3 TFs show PERFECT visual-JSON agreement. 5M visual: Hammer CLOSED, BOUNCING. 5M JSON: Bullish bodies, structure intact. Both sources confirm ENTER_NOW.\"\n    },\n    \"risk_management\": {\n      \"stop_loss\": 4078.3,\n      \"stop_loss_reasoning\": \"Below 5M hammer wick low (4078.9) with buffer. Visually below all recent swing lows.\",\n      \"take_profit_1\": {\n        \"price\": 4084.0,\n        \"visual_reasoning\": \"Next resistance cluster visible on 15M/5M charts\",\n        \"action\": \"Close 50%, move SL to BE\"\n      },\n      \"take_profit_2\": {\n        \"price\": 4088.5,\n        \"visual_reasoning\": \"Major 1H resistance zone from chart\",\n        \"action\": \"Close remaining or trail\"\n      },\n      \"risk_reward\": \"1:5.7 average\",\n      \"max_risk_percent\": \"2% of capital\"\n    },\n    \"exit_strategy\": {\n      \"visual_exit_triggers\": [\n        \"Bearish engulfing on 5M - EXIT 100% immediately\",\n        \"Break below 5M structure (4078.8) - EXIT 100%\",\n        \"Strong rejection wick at TP zones - EXIT partial/full\",\n        \"Momentum loss visible (shrinking bodies) - TIGHTEN SL\"\n      ],\n      \"breakeven_visual_trigger\": \"Series of 4-5 green 5M candles OR price reaches 4082 (visual halfway point)\",\n      \"trailing_stop_method\": \"Visual 5M swing low trailing with 5-pip buffer\"\n    }\n  },\n\n  \"risk_analysis\": {\n    \"overall_risk_score\": 2,\n    \"risk_level\": \"LOW\",\n    \"visual_risk_factors\": [],\n    \"data_risk_factors\": [],\n    \"acceptable_for_trading\": true,\n    \"risk_mitigation\": \"No significant risks identified. All factors aligned. Proceed with full position size.\"\n  },\n\n  \"recommendations\": {\n    \"primary_recommendation\": \"EXECUTE LONG IMMEDIATELY at market (4079.5). This is an EXCEPTIONAL setup with UNANIMOUS visual-JSON synthesis (100/100) and EXCELLENT data alignment (100/100) across all 3 timeframes. All synthesis confidence levels HIGH/VERY HIGH. Risk score LOW. No conflicts detected. Final Score: 98.5/100.\",\n    \"rationale\": \"SYNTHESIS ANALYSIS: All 3 timeframes show PERFECT visual-JSON agreement - this is the gold standard. 1H: Visual describes clear HH_HL + pristine OB → JSON confirms with BOS=1 + OB 87%. 15M: Visual shows textbook pin bar at zone → JSON validates with 15M BOS + OB 82% + zone valid. 5M: Visual reports hammer CLOSED, BOUNCING → JSON confirms bullish bodies + structure intact. COMPLETE HARMONY: When visual analysis (from AI vision) perfectly aligns with JSON data, confidence multiplies. No discrepancies across any timeframe. Risk:Reward 1:5.7 with LOW risk (2/10). Synthesis UNANIMOUS (100/100) + Data EXCELLENT (100/100) = Maximum confidence setup.\",\n    \"synthesis_summary\": \"This is what 'perfect synthesis' looks like: Visual descriptions from AI vision match JSON data validation on ALL 3 timeframes. No conflicts, no discrepancies, complete harmony. Both 'eyes' (visual analysis) and 'data' (JSON indicators) see the same perfect setup. This dual confirmation creates exceptional confidence.\",\n    \"alternative_plan\": \"N/A - No alternative needed. This is the trade to take.\",\n    \"next_review_time\": \"After entry, monitor every 5M candle for trade management\",\n    \"monitoring_points\": [\n      \"Watch 5M candles for continued green momentum\",\n      \"Monitor for bearish engulfing or opposite patterns (visual exit trigger)\",\n      \"Move SL to BE when 4-5 green candles appear or price reaches 4082\",\n      \"Watch for rejection wicks at TP zones (4084, 4088.5)\",\n      \"Trail SL below 5M swing lows after TP1 hit\"\n    ]\n  },\n\n  \"synthesis_insights\": {\n    \"what_synthesis_reveals\": [\n      \"1H: Visual analysis 'Clear HH_HL, pristine OB' ✅ JSON validation 'BOS=1, OB 87%' → PERFECT agreement\",\n      \"15M: Visual analysis 'Textbook pin bar, zone CLEAN' ✅ JSON validation '15M BOS, OB 82%, valid' → PERFECT agreement\",\n      \"5M: Visual analysis 'Hammer CLOSED, BOUNCING' ✅ JSON validation 'Bullish bodies, intact structure' → PERFECT agreement\"\n    ],\n    \"why_synthesis_matters\": \"Synthesis (visual + JSON harmony) reveals truth more reliably than either source alone. Visual describes what AI 'sees' in chart patterns. JSON provides mathematical validation. When both perfectly align across ALL 3 timeframes, we have the highest possible confidence - dual confirmation eliminates doubt.\",\n    \"synthesis_edge\": \"UNANIMOUS synthesis (all 3 TFs show PERFECT visual-JSON agreement) is the rarest and strongest signal. This means BOTH the visual pattern recognition AND the mathematical indicators agree completely. No conflicts, no discrepancies. This dual-source confirmation maximizes probability of success - it's like having two independent experts both saying 'this is perfect'.\",\n    \"agreement_power\": \"When agreement_level = PERFECT on all TFs, confidence compounds: HTF synthesis validates bias → MTF synthesis validates setup → LTF synthesis validates execution. Each perfect agreement adds multiplicative confidence, not just additive.\"\n  },\n\n  \"alerts\": [],\n\n  \"execution_checklist\": [\n    \"✅ 1H synthesis - PERFECT visual-JSON agreement (BOS, OB, structure)\",\n    \"✅ 15M synthesis - PERFECT visual-JSON agreement (pattern, zone, confluence)\",\n    \"✅ 5M synthesis - PERFECT visual-JSON agreement (hammer, momentum, trigger)\",\n    \"✅ Multi-TF synthesis - UNANIMOUS (100/100) all 3 TFs PERFECT\",\n    \"✅ Data alignment - EXCELLENT (100/100)\",\n    \"✅ Synthesis confidence - VERY HIGH across all TFs\",\n    \"✅ No conflicts - ZERO synthesis conflicts detected\",\n    \"✅ No discrepancies - Visual and JSON match perfectly\",\n    \"✅ Risk - LOW (2/10)\",\n    \"✅ R:R - 1:5.7 EXCELLENT\",\n    \"✅ Position size - 100% fully justified by unanimous synthesis\",\n    \"✅ READY TO EXECUTE - Maximum confidence setup\"\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -1568,
+        336
+      ],
+      "id": "706b6843-e3c9-47c8-a163-c6182cd64299",
+      "name": "Structured Output Parser3"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -1360,
+        128
+      ],
+      "id": "af8ba5fe-87a0-40ef-b7c4-823c068a1cd3",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const message = JSON.stringify($json.data[0].output, null, 2);\nconst chunkSize = 2000;\nconst chunks = [];\n\nfor (let i = 0; i < message.length; i += chunkSize) {\n  chunks.push(message.substring(i, i + chunkSize));\n}\n\n// return text1, text2, text3, ...\nreturn chunks.map((c, i) => {\n  const key = `text${i + 1}`;\n  return { json: { [key]: c } };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1152,
+        128
+      ],
+      "id": "31553811-d47a-434d-a459-351922744358",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "chatId": "-4845186808",
+        "text": "={{ $json.data[1].text2 }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        128
+      ],
+      "id": "811d50c1-0d5e-4db6-b1d5-7f94a5c4d19b",
+      "name": "Send a text message",
+      "webhookId": "391327d1-24d4-435b-acb1-ef25251293b1",
+      "credentials": {
+        "telegramApi": {
+          "id": "78jboHQhB2FTXyko",
+          "name": "Telegram account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-4845186808",
+        "text": "={{ $json.data[2].text3 }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        336
+      ],
+      "id": "c25c07cd-6647-4bfe-8039-7c66496e18fe",
+      "name": "Send a text message2",
+      "webhookId": "391327d1-24d4-435b-acb1-ef25251293b1",
+      "credentials": {
+        "telegramApi": {
+          "id": "78jboHQhB2FTXyko",
+          "name": "Telegram account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -944,
+        128
+      ],
+      "id": "1c95bd48-8b75-44bb-8a6d-f6906518d030",
+      "name": "Aggregate2"
+    },
+    {
+      "parameters": {
+        "chatId": "-4845186808",
+        "text": "={{ $json.data[3].text4 }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        512
+      ],
+      "id": "985823e4-79e0-4c3b-9c77-7fe9820aa524",
+      "name": "Send a text message3",
+      "webhookId": "391327d1-24d4-435b-acb1-ef25251293b1",
+      "credentials": {
+        "telegramApi": {
+          "id": "78jboHQhB2FTXyko",
+          "name": "Telegram account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-4845186808",
+        "text": "={{ $json.data[4].text5 }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        704
+      ],
+      "id": "aa99940b-24a6-4698-9290-af6a27b2c870",
+      "name": "Send a text message4",
+      "webhookId": "391327d1-24d4-435b-acb1-ef25251293b1",
+      "credentials": {
+        "telegramApi": {
+          "id": "78jboHQhB2FTXyko",
+          "name": "Telegram account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1a8588f4-9b8a-4b80-81b9-f70441b74255",
+              "name": "datatf5m",
+              "value": "={{ $('AI Agent1').item.json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3168,
+        1152
+      ],
+      "id": "3e438c7a-df86-4771-8da5-ff6e232e80e8",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -11888,
+        848
+      ],
+      "id": "144ad1ec-aef2-41f3-920a-37e6d1490def",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -12416,
+        800
+      ],
+      "id": "0141ba57-de30-406e-9045-2aeb0a5c8d43",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "connections": {
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Wait5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If7": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request22",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent7": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent7",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request17": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Analyze image7",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image7": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Analyze image8",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image8": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request20": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent7",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request21": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Analyze image9",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image9": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields9": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields10": {
+      "main": [
+        [
+          {
+            "node": "If7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request22": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript8",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields11": {
+      "main": [
+        [
+          {
+            "node": "Merge6",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields12": {
+      "main": [
+        [
+          {
+            "node": "Merge6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge6": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Aggregate2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate2": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "44a1c7cb211bf556b21079616b55e8553331e199179caabbda1010170137c75e"
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "events": [
+          "activate"
+        ]
+      },
+      "type": "n8n-nodes-base.n8nTrigger",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -48
+      ],
+      "id": "f74a6f86-e8dc-4d30-8615-00999c565fa9",
+      "name": "n8n Trigger"
+    },
+    {
+      "parameters": {
+        "path": "test",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -208,
+        128
+      ],
+      "id": "79fd2144-f5cf-4bac-9501-995dc8047f38",
+      "name": "Webhook",
+      "webhookId": "13e5fe25-808f-49be-8002-ae541e2aceb0"
+    },
+    {
+      "parameters": {
+        "url": "https://investicacademy.app.n8n.cloud/webhook/test",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        544,
+        128
+      ],
+      "id": "ad5c79dd-24ea-4da5-aa08-bef196654e4f",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        128
+      ],
+      "id": "c4f2af2a-e319-4457-a2b6-23b840a11bd6",
+      "name": "Wait",
+      "webhookId": "a8b0ddfa-31cc-44b3-95e7-cc0443be2f3a"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "YdlCFxWpqKQf9vlW",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/YdlCFxWpqKQf9vlW",
+          "cachedResultName": "Multi AI Agent Quant Trading — subsmc"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        128
+      ],
+      "id": "46025030-e699-4f7f-afab-db115d6dec3d",
+      "name": "Call 'subsmc'"
+    }
+  ],
+  "connections": {
+    "n8n Trigger": {
+      "main": [
+        [
+          {
+            "node": "Call 'subsmc'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Call 'subsmc'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'subsmc'": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "44a1c7cb211bf556b21079616b55e8553331e199179caabbda1010170137c75e"
+  }
+}
