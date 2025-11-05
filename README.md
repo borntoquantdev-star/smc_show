@@ -1381,7 +1381,7 @@ Potential: Portfolio of 5-10 symbols
 
 ---
 
-### Example 2: Coordinator Agent Output - XAUUSD Analysis
+### Example 2: Coordinator Agent Output - EURUSD Analysis
 
 **ไฟล์ต้นฉบับ:** [2.txt](2.txt)
 
@@ -1604,7 +1604,7 @@ Potential: Portfolio of 5-10 symbols
 
 | หัวข้อ | ค่า |
 |--------|-----|
-| **Symbol** | XAUUSD (Gold) |
+| **Symbol** | EURUSD  |
 | **Timestamp** | 2025-11-05 08:30:00 |
 | **Final Action** | **WAIT** ⏳ |
 | **Direction** | SHORT |
@@ -1648,7 +1648,7 @@ FINAL SCORE:         87.5/100 ⭐⭐⭐⭐⭐
 - **Agreement:** GOOD ✅
 - **Result:** Immediate ENTER decision with HIGH confidence
 
-**Example 2 - Coordinator XAUUSD:**
+**Example 2 - Coordinator EURUSD:**
 - **Visual Analysis:** "Retracement clearly visible across all 3 timeframes"
 - **JSON Confirmation:** "Bullish FVGs forming, confirming retracement phase"
 - **Agreement:** GOOD across all TFs ✅✅✅
@@ -1656,7 +1656,7 @@ FINAL SCORE:         87.5/100 ⭐⭐⭐⭐⭐
 
 #### 2. Multi-Timeframe Alignment Power
 
-**XAUUSD Perfect Alignment:**
+**EURUSD Perfect Alignment:**
 ```
 1H:  BEARISH trend → Supply at 1.1600–1.1615
       ↓
@@ -1692,7 +1692,7 @@ Conflicts: 0 (UNANIMOUS)
 - Position: **FULL (100%)**
 - เหตุผล: High confidence, strong confirmation
 
-**Coordinator XAUUSD (WAIT):**
+**Coordinator EURUSD (WAIT):**
 - Entry Zone: 1.1520–1.1528
 - SL: 1.1620 (92-100 pips)
 - TP1: 1.1485 (35-43 pips)
@@ -1702,7 +1702,7 @@ Conflicts: 0 (UNANIMOUS)
 
 #### 5. Conflict Resolution Excellence
 
-**XAUUSD Analysis:**
+**EURUSD Analysis:**
 ```json
 {
   "conflicts_detected": 0,
