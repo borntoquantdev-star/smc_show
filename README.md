@@ -1146,7 +1146,7 @@ Potential: Daily → 4H → 1H → 15M → 5M → 1M
 ### 3. Multi-Asset Support
 
 ```
-Current: Single symbol (likely BTCUSDT)
+Current: Single symbol (likely EURUSD)
 Potential: Portfolio of 5-10 symbols
 - Correlation analysis
 - Sector rotation
@@ -1287,7 +1287,7 @@ Potential: Portfolio of 5-10 symbols
     "output": {
       "timeframe": "5m",
       "timestamp": "2025-11-05T08:15:00",
-      "symbol": "BTCUSDT",
+      "symbol": "EURUSD",
       "analysis": {
         "current_candle_analysis": {
           "type": "Bullish",
@@ -1384,7 +1384,7 @@ Potential: Portfolio of 5-10 symbols
 
 | หัวข้อ | ค่า |
 |--------|-----|
-| **Symbol** | BTCUSDT |
+| **Symbol** | EURUSD |
 | **Timeframe** | 5M |
 | **Action** | **ENTER NOW (LONG)** ✅ |
 | **Confidence** | HIGH |
@@ -1405,7 +1405,7 @@ Potential: Portfolio of 5-10 symbols
 
 ---
 
-### Example 2: Coordinator Agent Output - XAUUSD Analysis
+### Example 2: Coordinator Agent Output - EURUSD Analysis
 
 **ไฟล์ต้นฉบับ:** [2.txt](2.txt)
 
@@ -1423,7 +1423,7 @@ Potential: Portfolio of 5-10 symbols
     "output": {
       "coordinator_decision": {
         "timestamp": "2025-11-05T08:30:00",
-        "symbol": "XAUUSD",
+        "symbol": "EURUSD",
         "final_action": "WAIT",
         "direction": "SHORT",
         "confidence": "HIGH",
@@ -1628,7 +1628,7 @@ Potential: Portfolio of 5-10 symbols
 
 | หัวข้อ | ค่า |
 |--------|-----|
-| **Symbol** | XAUUSD (Gold) |
+| **Symbol** | EURUSD (Gold) |
 | **Timestamp** | 2025-11-05 08:30:00 |
 | **Final Action** | **WAIT** ⏳ |
 | **Direction** | SHORT |
@@ -1672,7 +1672,7 @@ FINAL SCORE:         87.5/100 ⭐⭐⭐⭐⭐
 - **Agreement:** GOOD ✅
 - **Result:** Immediate ENTER decision with HIGH confidence
 
-**Example 2 - Coordinator XAUUSD:**
+**Example 2 - Coordinator EURUSD:**
 - **Visual Analysis:** "Retracement clearly visible across all 3 timeframes"
 - **JSON Confirmation:** "Bullish FVGs forming, confirming retracement phase"
 - **Agreement:** GOOD across all TFs ✅✅✅
@@ -1680,7 +1680,7 @@ FINAL SCORE:         87.5/100 ⭐⭐⭐⭐⭐
 
 #### 2. Multi-Timeframe Alignment Power
 
-**XAUUSD Perfect Alignment:**
+**EURUSD Perfect Alignment:**
 ```
 1H:  BEARISH trend → Supply at 1.1600–1.1615
       ↓
@@ -1716,7 +1716,7 @@ Conflicts: 0 (UNANIMOUS)
 - Position: **FULL (100%)**
 - เหตุผล: High confidence, strong confirmation
 
-**Coordinator XAUUSD (WAIT):**
+**Coordinator EURUSD (WAIT):**
 - Entry Zone: 1.1520–1.1528
 - SL: 1.1620 (92-100 pips)
 - TP1: 1.1485 (35-43 pips)
@@ -1726,7 +1726,7 @@ Conflicts: 0 (UNANIMOUS)
 
 #### 5. Conflict Resolution Excellence
 
-**XAUUSD Analysis:**
+**EURUSD Analysis:**
 ```json
 {
   "conflicts_detected": 0,
