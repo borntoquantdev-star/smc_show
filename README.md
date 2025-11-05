@@ -1146,7 +1146,7 @@ Potential: Daily → 4H → 1H → 15M → 5M → 1M
 ### 3. Multi-Asset Support
 
 ```
-Current: Single symbol (likely BTCUSDT)
+Current: Single symbol (likely EURUSD)
 Potential: Portfolio of 5-10 symbols
 - Correlation analysis
 - Sector rotation
@@ -1263,7 +1263,7 @@ Potential: Portfolio of 5-10 symbols
     "output": {
       "timeframe": "5m",
       "timestamp": "2025-11-05T08:15:00",
-      "symbol": "BTCUSDT",
+      "symbol": "EURUSD",
       "analysis": {
         "current_candle_analysis": {
           "type": "Bullish",
@@ -1360,7 +1360,7 @@ Potential: Portfolio of 5-10 symbols
 
 | หัวข้อ | ค่า |
 |--------|-----|
-| **Symbol** | BTCUSDT |
+| **Symbol** | EURUSD |
 | **Timeframe** | 5M |
 | **Action** | **ENTER NOW (LONG)** ✅ |
 | **Confidence** | HIGH |
@@ -1399,7 +1399,7 @@ Potential: Portfolio of 5-10 symbols
     "output": {
       "coordinator_decision": {
         "timestamp": "2025-11-05T08:30:00",
-        "symbol": "XAUUSD",
+        "symbol": "EURUSD",
         "final_action": "WAIT",
         "direction": "SHORT",
         "confidence": "HIGH",
