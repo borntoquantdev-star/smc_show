@@ -3,7 +3,7 @@
     "output": {
       "coordinator_decision": {
         "timestamp": "2025-11-05T08:30:00",
-        "symbol": "XAUUSD",
+        "symbol": "EURUSD",
         "final_action": "WAIT",
         "direction": "SHORT",
         "confidence": "HIGH",
