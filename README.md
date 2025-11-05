@@ -1245,7 +1245,7 @@ Potential: Portfolio of 5-10 symbols
 
 รูปที่ 1 แสดงสถาปัตยกรรม n8n workflow แบบเต็ม:
 
-![n8n Workflow](https://github.com/user-attachments/assets/[YOUR-IMAGE-1-ID])
+![n8n Workflow](1.wf.png)
 
 *Complete n8n workflow showing all 4 AI agents (1H, 15M, 5M, Coordinator), decision gates (If3, If6, If7), merge nodes, and complete data flow*
 
@@ -1411,7 +1411,7 @@ Potential: Portfolio of 5-10 symbols
 
 รูปที่ 2 แสดง TradingView chart พร้อม analysis:
 
-![Trading Chart](https://github.com/user-attachments/assets/[YOUR-IMAGE-2-ID])
+![Trading Chart](4.tdv.png)
 
 *TradingView chart showing EURUSD 5M with Order Block zones, entry point (BUY), support/resistance levels, and SMC analysis zones*
 
