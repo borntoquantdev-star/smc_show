@@ -3,7 +3,7 @@
     "output": {
       "timeframe": "5m",
       "timestamp": "2025-11-05T08:15:00",
-      "symbol": "BTCUSDT",
+      "symbol": "EURUSD",
       "analysis": {
         "current_candle_analysis": {
           "type": "Bullish",
