@@ -1146,7 +1146,7 @@ Potential: Daily → 4H → 1H → 15M → 5M → 1M
 ### 3. Multi-Asset Support
 
 ```
-Current: Single symbol (likely EURUSD)
+Current: Single symbol (likely BTCUSDT)
 Potential: Portfolio of 5-10 symbols
 - Correlation analysis
 - Sector rotation
@@ -1245,9 +1245,33 @@ Potential: Portfolio of 5-10 symbols
 
 รูปที่ 1 แสดงสถาปัตยกรรม n8n workflow แบบเต็ม:
 
-![n8n Workflow](1.wf.png)
+![n8n Workflow](https://github.com/user-attachments/assets/[YOUR-IMAGE-1-ID])
 
 *Complete n8n workflow showing all 4 AI agents (1H, 15M, 5M, Coordinator), decision gates (If3, If6, If7), merge nodes, and complete data flow*
+
+---
+
+### Multi-Timeframe Chart Analysis
+
+ภาพวิเคราะห์แผนภูมิทั้ง 3 timeframes แสดง SMC structure, Order Blocks, และ entry zones:
+
+#### 1H Chart - Higher Timeframe (HTF) Analysis
+
+![1H Chart Analysis](chart_mpl_1h.png)
+
+*1H timeframe chart showing market bias, key order blocks, break of structure (BOS), and higher timeframe supply/demand zones*
+
+#### 15M Chart - Medium Timeframe (MTF) Analysis
+
+![15M Chart Analysis](chart_mpl_15m.png)
+
+*15M timeframe chart showing entry setup identification, fair value gaps (FVG), and medium timeframe structure*
+
+#### 5M Chart - Lower Timeframe (LTF) Analysis
+
+![5M Chart Analysis](chart_mpl_5m.png)
+
+*5M timeframe chart showing precise execution zones, entry triggers, and lower timeframe price action*
 
 ---
 
@@ -1263,7 +1287,7 @@ Potential: Portfolio of 5-10 symbols
     "output": {
       "timeframe": "5m",
       "timestamp": "2025-11-05T08:15:00",
-      "symbol": "EURUSD",
+      "symbol": "BTCUSDT",
       "analysis": {
         "current_candle_analysis": {
           "type": "Bullish",
@@ -1360,7 +1384,7 @@ Potential: Portfolio of 5-10 symbols
 
 | หัวข้อ | ค่า |
 |--------|-----|
-| **Symbol** | EURUSD |
+| **Symbol** | BTCUSDT |
 | **Timeframe** | 5M |
 | **Action** | **ENTER NOW (LONG)** ✅ |
 | **Confidence** | HIGH |
@@ -1381,13 +1405,13 @@ Potential: Portfolio of 5-10 symbols
 
 ---
 
-### Example 2: Coordinator Agent Output - EURUSD Analysis
+### Example 2: Coordinator Agent Output - XAUUSD Analysis
 
 **ไฟล์ต้นฉบับ:** [2.txt](2.txt)
 
 รูปที่ 2 แสดง TradingView chart พร้อม analysis:
 
-![Trading Chart](4.tdv.png)
+![Trading Chart](https://github.com/user-attachments/assets/[YOUR-IMAGE-2-ID])
 
 *TradingView chart showing EURUSD 5M with Order Block zones, entry point (BUY), support/resistance levels, and SMC analysis zones*
 
@@ -1399,7 +1423,7 @@ Potential: Portfolio of 5-10 symbols
     "output": {
       "coordinator_decision": {
         "timestamp": "2025-11-05T08:30:00",
-        "symbol": "EURUSD",
+        "symbol": "XAUUSD",
         "final_action": "WAIT",
         "direction": "SHORT",
         "confidence": "HIGH",
@@ -1604,7 +1628,7 @@ Potential: Portfolio of 5-10 symbols
 
 | หัวข้อ | ค่า |
 |--------|-----|
-| **Symbol** | EURUSD  |
+| **Symbol** | XAUUSD (Gold) |
 | **Timestamp** | 2025-11-05 08:30:00 |
 | **Final Action** | **WAIT** ⏳ |
 | **Direction** | SHORT |
@@ -1648,7 +1672,7 @@ FINAL SCORE:         87.5/100 ⭐⭐⭐⭐⭐
 - **Agreement:** GOOD ✅
 - **Result:** Immediate ENTER decision with HIGH confidence
 
-**Example 2 - Coordinator EURUSD:**
+**Example 2 - Coordinator XAUUSD:**
 - **Visual Analysis:** "Retracement clearly visible across all 3 timeframes"
 - **JSON Confirmation:** "Bullish FVGs forming, confirming retracement phase"
 - **Agreement:** GOOD across all TFs ✅✅✅
@@ -1656,7 +1680,7 @@ FINAL SCORE:         87.5/100 ⭐⭐⭐⭐⭐
 
 #### 2. Multi-Timeframe Alignment Power
 
-**EURUSD Perfect Alignment:**
+**XAUUSD Perfect Alignment:**
 ```
 1H:  BEARISH trend → Supply at 1.1600–1.1615
       ↓
@@ -1692,7 +1716,7 @@ Conflicts: 0 (UNANIMOUS)
 - Position: **FULL (100%)**
 - เหตุผล: High confidence, strong confirmation
 
-**Coordinator EURUSD (WAIT):**
+**Coordinator XAUUSD (WAIT):**
 - Entry Zone: 1.1520–1.1528
 - SL: 1.1620 (92-100 pips)
 - TP1: 1.1485 (35-43 pips)
@@ -1702,7 +1726,7 @@ Conflicts: 0 (UNANIMOUS)
 
 #### 5. Conflict Resolution Excellence
 
-**EURUSD Analysis:**
+**XAUUSD Analysis:**
 ```json
 {
   "conflicts_detected": 0,
